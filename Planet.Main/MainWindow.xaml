@@ -6,16 +6,115 @@
         xmlns:local="clr-namespace:Planet.Main"
         mc:Ignorable="d"
         Title="Planet"
-        Height="450"
-        Width="800"
+        Height="560"
+        Width="900"
+        MinHeight="420"
+        MinWidth="640"
         WindowStyle="None"
         AllowsTransparency="True"
         Background="Transparent"
         WindowStartupLocation="CenterScreen">
-    <!-- 当前为占位主界面：无边框、透明背景，居中显示“Planet 重写版”文本 -->
-    <TextBlock Text="Planet 重写版"
-               HorizontalAlignment="Center"
-               VerticalAlignment="Center"
-               FontSize="28"
-               Foreground="Black" />
+
+    <Window.Resources>
+        <!-- 颜色占位：主题系统在后续阶段接入后统一替换 -->
+        <SolidColorBrush x:Key="SidebarBrush" Color="#23272F" />
+        <SolidColorBrush x:Key="SidebarHoverBrush" Color="#303642" />
+        <SolidColorBrush x:Key="SidebarPressedBrush" Color="#3A4250" />
+        <SolidColorBrush x:Key="SidebarTextBrush" Color="#C7CDD6" />
+        <SolidColorBrush x:Key="SidebarSelectedBrush" Color="#3E6F96" />
+        <SolidColorBrush x:Key="ContentBrush" Color="#F5F6F8" />
+        <SolidColorBrush x:Key="PageTextBrush" Color="#444A53" />
+
+        <!-- 左侧导航按钮：圆角 + 鼠标悬浮/按下变色 -->
+        <Style x:Key="NavButtonStyle" TargetType="Button">
+            <Setter Property="Foreground" Value="{StaticResource SidebarTextBrush}" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Height" Value="40" />
+            <Setter Property="Margin" Value="10,3" />
+            <Setter Property="Padding" Value="14,0" />
+            <Setter Property="FontFamily" Value="Segoe UI, Microsoft YaHei UI, Segoe UI Emoji" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="HorizontalContentAlignment" Value="Left" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Bg"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="8"
+                                SnapsToDevicePixels="True">
+                            <ContentPresenter Margin="{TemplateBinding Padding}"
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bg" Property="Background" Value="{StaticResource SidebarHoverBrush}" />
+                                <Setter Property="Foreground" Value="#FFFFFF" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="Bg" Property="Background" Value="{StaticResource SidebarPressedBrush}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!-- ============ 左侧标签栏（固定 200px） ============ -->
+        <Grid Grid.Column="0"
+              Background="{StaticResource SidebarBrush}"
+              MouseLeftButtonDown="OnSidebar_MouseLeftButtonDown">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="48" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <!-- 顶部空白拖拽区：按住拖动整个窗口 -->
+            <TextBlock Grid.Row="0"
+                       Text="Planet"
+                       Margin="20,0"
+                       VerticalAlignment="Center"
+                       Foreground="#9AA3AF"
+                       FontSize="13"
+                       FontWeight="SemiBold" />
+
+            <!-- 五个导航按钮（图标先用 Emoji 占位，后续统一替换为 SVG） -->
+            <StackPanel Grid.Row="1">
+                <Button x:Name="BtnHome" Content="🏠 主页"
+                        Style="{StaticResource NavButtonStyle}"
+                        Tag="0" Click="OnNavButtonClick" />
+                <Button x:Name="BtnFunct" Content="🧰 功能"
+                        Style="{StaticResource NavButtonStyle}"
+                        Tag="1" Click="OnNavButtonClick" />
+                <Button x:Name="BtnMystery" Content="❓ ???"
+                        Style="{StaticResource NavButtonStyle}"
+                        Tag="2" Click="OnNavButtonClick" />
+                <Button x:Name="BtnInfo" Content="ℹ️ 信息"
+                        Style="{StaticResource NavButtonStyle}"
+                        Tag="3" Click="OnNavButtonClick" />
+                <Button x:Name="BtnSettings" Content="⚙️ 设置"
+                        Style="{StaticResource NavButtonStyle}"
+                        Tag="4" Click="OnNavButtonClick" />
+            </StackPanel>
+        </Grid>
+
+        <!-- ============ 右侧主内容区（占满剩余空间） ============ -->
+        <Grid Grid.Column="1" Background="{StaticResource ContentBrush}">
+            <ContentControl x:Name="MainContent"
+                            HorizontalContentAlignment="Stretch"
+                            VerticalContentAlignment="Stretch" />
+        </Grid>
+    </Grid>
 </Window>
