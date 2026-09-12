@@ -1,0 +1,168 @@
+# ================================================================
+# Planet-Rewritten — Visual Studio (C# / .NET 8 + WPF)
+#
+# 基于 GitHub 官方 VisualStudio.gitignore 模板定制：
+#   https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
+#
+# 原则：bin/、obj/、.vs/ 等编译产物与本地缓存一律不入库，
+#       入库内容仅限源代码、项目文件与文档。
+# 说明：便携版最终输出（app/）与原始参考材料（ref/）位于仓库之外，
+#       无需在此忽略。
+# ================================================================
+
+# ---------------- 用户特定文件 ----------------
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.env
+*.userprefs
+
+# ---------------- 构建结果 ----------------
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+[Ww][Ii][Nn]32/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+[Aa][Rr][Mm]64[Ee][Cc]/
+bld/
+[Oo]bj/
+[Oo]ut/
+[Ll]og/
+[Ll]ogs/
+# bin 目录（.NET 8 编译输出均在其中）
+**/[Bb]in/*
+#!**/[Bb]in/*.refresh
+
+# ---------------- Visual Studio 缓存/选项目录 ----------------
+.vs/
+Generated\ Files/
+GeneratedFiles/
+
+# ---------------- 测试结果 ----------------
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+*.trx
+*.VisualState.xml
+TestResult.xml
+nunit-*.xml
+*.received.*
+
+# ---------------- C# 编译过程产物 ----------------
+*_i.c
+*_p.c
+*_h.h
+*.ilk
+*.meta
+*.obj
+*.idb
+*.iobj
+*.pch
+*.pdb
+*.ipdb
+*.pgc
+*.pgd
+*.rsp
+!Directory.Build.rsp
+*.sbr
+*.tlb
+*.tli
+*.tlh
+*.tmp
+*.tmp_proj
+*_wpftmp.csproj
+*.log
+*.tlog
+*.vspscc
+*.vssscc
+.builds
+*.pidb
+*.svclog
+*.scc
+*.binlog
+MSBuild_Logs/
+
+# ---------------- 原生工具缓存 ----------------
+ipch/
+*.aps
+*.ncb
+*.opendb
+*.opensdf
+*.sdf
+*.cachefile
+*.VC.db
+*.VC.VC.opendb
+*.[Cc]ache
+!?*.[Cc]ache/
+
+# ---------------- 分析/覆盖率/第三方工具输出 ----------------
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+_TeamCity*
+*.dotCover
+.axoCover/*
+!.axoCover/settings.json
+coverage*.json
+coverage*.xml
+coverage*.info
+*.coverage
+*.coveragexml
+_NCrunch_*
+.NCrunch_*
+.*crunch*.local.xml
+nCrunchTemp_*
+FakesAssemblies/
+BenchmarkDotNet.Artifacts/
+artifacts/
+.artifacts/
+OpenCover/
+
+# ---------------- NuGet ----------------
+*.nupkg
+*.snupkg
+*.nuget.props
+*.nuget.targets
+**/[Pp]ackages/*
+!**/[Pp]ackages/build/
+#!**/[Pp]ackages/repositories.config
+
+# ---------------- 发布/打包输出 ----------------
+publish/
+*.pubxml
+*.publishproj
+*.azurePubxml
+PublishScripts/
+*.appx
+*.appxbundle
+*.appxupload
+AppPackages/
+BundleArtifacts/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.vsix
+
+# ---------------- VS Code / 其他 IDE ----------------
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+.history/
+.idea/
+*.sln.iml
+**/.vshistory/
+
+# ---------------- 操作系统/通用忽略 ----------------
+.DS_Store
+Thumbs.db
+Desktop.ini
+~$*
+node_modules/

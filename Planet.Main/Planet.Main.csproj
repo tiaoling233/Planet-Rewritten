@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <AssemblyName>Planet.Main</AssemblyName>
+    <RootNamespace>Planet.Main</RootNamespace>
+    <Version>3.0.0</Version>
+    <Product>Planet</Product>
+    <Description>Planet 软件本体（便携版随启动器发布，位于 Data 文件夹内）。</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\Shared\AppLayout.cs" Link="Shared\AppLayout.cs" />
+  </ItemGroup>
+
+</Project>
