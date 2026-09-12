@@ -32,7 +32,8 @@
                               Color="#000000" />
         </Border.Effect>
 
-        <Grid Width="380">
+        <!-- 宽度自适应内容（多按钮时自动加宽），但保底 380 -->
+        <Grid MinWidth="380">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />

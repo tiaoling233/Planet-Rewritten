@@ -17,20 +17,27 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border x:Name="Bg"
-                                Background="{TemplateBinding Background}"
+                        <!-- 悬浮/按下采用半透明黑色叠加层：任意底色（蓝/红/自定义）都会自然变深 -->
+                        <Border Background="{TemplateBinding Background}"
                                 CornerRadius="6"
                                 SnapsToDevicePixels="True">
-                            <ContentPresenter HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"
-                                              Margin="{TemplateBinding Padding}" />
+                            <Grid>
+                                <ContentPresenter HorizontalAlignment="Center"
+                                                  VerticalAlignment="Center"
+                                                  Margin="{TemplateBinding Padding}" />
+                                <!-- 叠加层：默认透明，悬浮/按下时变为半透明黑 -->
+                                <Border x:Name="HoverOverlay"
+                                        Background="Transparent"
+                                        CornerRadius="6"
+                                        IsHitTestVisible="False" />
+                            </Grid>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Bg" Property="Background" Value="#356082" />
+                                <Setter TargetName="HoverOverlay" Property="Background" Value="#26000000" />
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="Bg" Property="Background" Value="#2C4F6D" />
+                                <Setter TargetName="HoverOverlay" Property="Background" Value="#40000000" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
