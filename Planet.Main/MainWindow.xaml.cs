@@ -74,6 +74,18 @@ public partial class MainWindow : Window
         };
     }
 
+    private void OnHideClick(object sender, RoutedEventArgs e)
+    {
+        // 隐藏窗口：最小化（后续可改为隐藏到系统托盘）
+        WindowState = WindowState.Minimized;
+    }
+
+    private void OnExitClick(object sender, RoutedEventArgs e)
+    {
+        // 退出应用
+        Application.Current.Shutdown();
+    }
+
     private void OnSidebar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
         // 点击在导航按钮上时不触发窗口拖动（按钮自行处理点击）。
