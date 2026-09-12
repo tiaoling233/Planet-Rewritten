@@ -50,10 +50,10 @@ public partial class MainWindow : Window
             _navButtons[i].Background = i == index ? _selectedNavBrush : _defaultNavBrush;
         }
 
-        // 页面占位：后续每个标签页会替换为独立的 UserControl
+        // 主页已接入独立 UserControl；其余页面暂用占位文本
         MainContent.Content = index switch
         {
-            0 => CreatePlaceholder("这是主页"),
+            0 => new Views.HomeView(),
             1 => CreatePlaceholder("这是功能"),
             2 => CreatePlaceholder("这是 ???"),
             3 => CreatePlaceholder("这是信息"),
