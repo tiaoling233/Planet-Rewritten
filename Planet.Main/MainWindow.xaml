@@ -139,5 +139,12 @@
                             HorizontalContentAlignment="Stretch"
                             VerticalContentAlignment="Stretch" />
         </Grid>
+
+        <!-- 背景暗化遮罩：弹窗弹出时覆盖全部内容（Panel.ZIndex 确保在最顶层） -->
+        <Border x:Name="DimOverlay"
+                Grid.ColumnSpan="2"
+                Background="#80000000"
+                Visibility="Collapsed"
+                Panel.ZIndex="999" />
     </Grid>
 </Window>

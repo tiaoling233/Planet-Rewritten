@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using Planet.Main;
 
 namespace Planet.Main.Views;
 
@@ -43,7 +44,18 @@ public partial class MysteryView : UserControl
             popup.PopupBackground = new SolidColorBrush(Color.FromRgb(0xFF, 0xF0, 0xF0));
         }
 
-        popup.ShowDialog();
+        // 背景暗化 + 模态弹窗：try/finally 保证无论弹窗如何关闭都会隐藏遮罩
+        var mainWindow = Window.GetWindow(this) as MainWindow;
+
+        mainWindow?.ShowDimOverlay(true);
+        try
+        {
+            popup.ShowDialog();
+        }
+        finally
+        {
+            mainWindow?.ShowDimOverlay(false);
+        }
     }
 
     /// <summary>按 计算机名称 + 当前日期 计算今日人品（0~100）。</summary>

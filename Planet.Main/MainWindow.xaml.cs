@@ -86,6 +86,14 @@ public partial class MainWindow : Window
         Application.Current.Shutdown();
     }
 
+    /// <summary>
+    /// 显示或隐藏背景暗化遮罩（弹窗弹出时调用）。
+    /// </summary>
+    public void ShowDimOverlay(bool isVisible)
+    {
+        DimOverlay.Visibility = isVisible ? Visibility.Visible : Visibility.Collapsed;
+    }
+
     private void OnSidebar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
         // 点击在导航按钮上时不触发窗口拖动（按钮自行处理点击）。
