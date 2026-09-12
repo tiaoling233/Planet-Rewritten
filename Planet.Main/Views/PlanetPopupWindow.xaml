@@ -64,12 +64,11 @@
                        TextAlignment="Center"
                        Margin="0,4,0,18" />
 
-            <!-- Row 3：按钮（右下角） -->
-            <Button Grid.Row="3"
-                    Content="{Binding ButtonText, ElementName=Root}"
-                    Style="{StaticResource RoundedButtonStyle}"
-                    HorizontalAlignment="Right"
-                    Click="OnCloseButtonClick" />
+            <!-- Row 3：按钮（右下角，横向排列，由 ButtonTexts 动态生成） -->
+            <StackPanel Grid.Row="3"
+                        x:Name="ButtonPanel"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Right" />
         </Grid>
     </Border>
 </Window>

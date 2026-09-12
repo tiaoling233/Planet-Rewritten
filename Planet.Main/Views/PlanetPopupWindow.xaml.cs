@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using System.Collections.Generic;
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 
 namespace Planet.Main.Views;
@@ -49,12 +51,12 @@ public partial class PlanetPopupWindow : Window
             typeof(PlanetPopupWindow),
             new PropertyMetadata(string.Empty));
 
-    public static readonly DependencyProperty ButtonTextProperty =
+    public static readonly DependencyProperty ButtonTextsProperty =
         DependencyProperty.Register(
-            nameof(ButtonText),
-            typeof(string),
+            nameof(ButtonTexts),
+            typeof(List<string>),
             typeof(PlanetPopupWindow),
-            new PropertyMetadata("确定"));
+            new PropertyMetadata(new List<string> { "确定" }, OnButtonTextsChanged));
 
     /// <summary>弹窗标题文本。</summary>
     public string TitleText
@@ -91,20 +93,65 @@ public partial class PlanetPopupWindow : Window
         set => SetValue(MessageTextProperty, value);
     }
 
-    /// <summary>右下角按钮文本（默认“确定”）。</summary>
-    public string ButtonText
+    /// <summary>右下角按钮文本列表（默认仅一个“确定”，向后兼容单按钮用法）。</summary>
+    public List<string> ButtonTexts
     {
-        get => (string)GetValue(ButtonTextProperty);
-        set => SetValue(ButtonTextProperty, value);
+        get => (List<string>)GetValue(ButtonTextsProperty);
+        set => SetValue(ButtonTextsProperty, value);
     }
+
+    /// <summary>用户点击的按钮索引（0 起，未点击任何按钮为 -1，例如通过 Alt+F4 关闭）。</summary>
+    public int SelectedButtonIndex { get; private set; } = -1;
 
     public PlanetPopupWindow()
     {
         InitializeComponent();
+        RebuildButtons();
     }
 
-    private void OnCloseButtonClick(object sender, RoutedEventArgs e)
+    private static void OnButtonTextsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
+        ((PlanetPopupWindow)d).RebuildButtons();
+    }
+
+    /// <summary>依据 ButtonTexts 重建右下角按钮区（横向排列，右下角对齐）。</summary>
+    private void RebuildButtons()
+    {
+        if (ButtonPanel is null)
+        {
+            return; // XAML 尚未加载（InitializeComponent 之前触发），加载后构造函数会再次调用
+        }
+
+        ButtonPanel.Children.Clear();
+        List<string> texts = ButtonTexts;
+        if (texts is null || texts.Count == 0)
+        {
+            texts = new List<string> { "确定" };
+        }
+
+        for (int i = 0; i < texts.Count; i++)
+        {
+            var button = new Button
+            {
+                Content = texts[i],
+                Style = (Style)Application.Current.FindResource("RoundedButtonStyle"),
+                MinWidth = 84,
+                Margin = i == 0 ? new Thickness(0, 0, 0, 0) : new Thickness(8, 0, 0, 0),
+                Tag = i,
+            };
+            button.Click += OnButtonButtonClick;
+            ButtonPanel.Children.Add(button);
+        }
+    }
+
+    private void OnButtonButtonClick(object sender, RoutedEventArgs e)
+    {
+        if (sender is Button button && button.Tag is int index)
+        {
+            SelectedButtonIndex = index;
+        }
+
+        DialogResult = true;
         Close();
     }
 }

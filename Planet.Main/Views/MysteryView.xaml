@@ -32,6 +32,19 @@
                     Width="150"
                     Height="40"
                     Click="OnLuckyButtonClick" />
+
+            <!-- 千万别点：红色边框 + 红色文本警示按钮 -->
+            <Button x:Name="DoNotClickButton"
+                    Content="⚠️ 千万别点"
+                    Style="{StaticResource RoundedButtonStyle}"
+                    Width="150"
+                    Height="40"
+                    Margin="0,14,0,0"
+                    Background="#C0392B"
+                    Foreground="#FFE8E8"
+                    BorderBrush="#96281B"
+                    BorderThickness="1"
+                    Click="OnDoNotClickButtonClick" />
         </StackPanel>
     </Grid>
 </UserControl>
