@@ -65,24 +65,37 @@ Planet\                  # 便携版根目录：仅两个顶层条目
     └── Temp\            # 临时文件（插件下载的 zip 等）
 ```
 
-## 🔨 构建与打包
+## 🖥 开发环境
+
+| 项目 | 建议 |
+| --- | --- |
+| 编辑器 | Visual Studio Code（安装 **C# Dev Kit** / C# 扩展）或 Visual Studio 2022（.NET 8 工作负载） |
+| SDK | .NET 8 SDK（本机已装更高版本 SDK 亦可，目标框架仍为 `net8.0-windows`） |
+| 运行/测试平台 | Windows 10 1703 及以上或 Windows 11 |
+
+## 🔨 构建与运行（VS Code 终端，dotnet CLI）
 
 ```powershell
-# 1. 仅编译（解决方案）
-dotnet build src\Planet.sln
+cd D:\AAAPlanet-Rewritten\src
 
-# 2. 一键打包便携版到 app\Planet\（框架依赖，需目标机已装 .NET 8 运行时）
-.\src\build.ps1
+# 1. 还原 NuGet 依赖
+dotnet restore Planet.sln
 
-# 3. 打包自包含便携版（免安装运行时，体积较大）
-.\src\build.ps1 -SelfContained
+# 2. 编译整个解决方案（Launcher + Main）
+dotnet build Planet.sln
+
+# 3. 单独运行软件本体（WPF 窗口，配置为无边框透明）
+dotnet run --project Planet.Main
+
+# 4. 以 Release 编译
+dotnet build Planet.sln -c Release
 ```
 
-或手动发布：
+一键打包便携版到 `app\Planet\`：
 
 ```powershell
-dotnet publish src\Planet.Launcher -c Release -o app\Planet
-dotnet publish src\Planet.Main -c Release -o app\Planet\Data
+.\build.ps1                # 框架依赖（需目标机已装 .NET 8 运行时）
+.\build.ps1 -SelfContained # 自包含（免安装运行时，体积较大）
 ```
 
 > `build.ps1` 会自动补齐 `Data\Logs`、`Data\Applets` 等子目录并清理调试符号。

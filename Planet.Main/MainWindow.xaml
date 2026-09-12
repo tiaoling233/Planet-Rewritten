@@ -5,8 +5,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Planet.Main"
         mc:Ignorable="d"
-        Title="Planet" Height="450" Width="800">
-    <Grid>
-
-    </Grid>
+        Title="Planet"
+        Height="450"
+        Width="800"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        WindowStartupLocation="CenterScreen">
+    <!-- 当前为占位主界面：无边框、透明背景，居中显示“Planet 重写版”文本 -->
+    <TextBlock Text="Planet 重写版"
+               HorizontalAlignment="Center"
+               VerticalAlignment="Center"
+               FontSize="28"
+               Foreground="Black" />
 </Window>
