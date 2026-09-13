@@ -84,7 +84,7 @@
                     BorderThickness="1"
                     Padding="18,16">
                 <StackPanel>
-                    <TextBlock Text="开发者信息"
+                    <TextBlock Text="开发信息"
                                FontSize="15"
                                FontWeight="SemiBold"
                                Foreground="#2B2F36" />
@@ -98,6 +98,7 @@
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
 
                         <TextBlock Grid.Row="0" Grid.Column="0" Text="原版 VBS 作者" Style="{StaticResource BodyTitleStyle}" Margin="0,4" />
@@ -106,6 +107,8 @@
                         <TextBlock Grid.Row="1" Grid.Column="1" Text="tiaoling233" Style="{StaticResource BodyItemStyle}" Margin="0,4" />
                         <TextBlock Grid.Row="2" Grid.Column="0" Text="开发工具" Style="{StaticResource BodyTitleStyle}" Margin="0,4" />
                         <TextBlock Grid.Row="2" Grid.Column="1" Text="C# / .NET 8 / WPF / VS Code" Style="{StaticResource BodyItemStyle}" Margin="0,4" />
+                        <TextBlock Grid.Row="3" Grid.Column="0" Text="图标来源" Style="{StaticResource BodyTitleStyle}" Margin="0,4" />
+                        <TextBlock Grid.Row="3" Grid.Column="1" Text="iconfont (https://www.iconfont.cn/)" Style="{StaticResource BodyItemStyle}" Margin="0,4" />
                     </Grid>
                 </StackPanel>
             </Border>
