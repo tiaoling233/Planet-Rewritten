@@ -1,17 +1,22 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using Planet.Main.Services;
 
 namespace Planet.Main;
 
+/// <summary>
+/// 主窗口：左侧 200px 标签栏（主页/功能/???/信息/设置）+ 右侧内容区。
+/// 标签栏空白处按住可拖动窗口；右侧内容区由 ContentControl 承接页面切换。
+/// </summary>
 public partial class MainWindow : Window
 {
+    private static readonly Brush _defaultNavBrush = Brushes.Transparent;
+    private static readonly Brush _selectedNavBrush = new SolidColorBrush(Color.FromRgb(0x3E, 0x6F, 0x96));
     private static readonly Brush _pageTextBrush = new SolidColorBrush(Color.FromRgb(0x44, 0x4A, 0x53));
 
-    private readonly RadioButton[] _navButtons;
+    private readonly Button[] _navButtons;
 
     public MainWindow()
     {
@@ -30,7 +35,7 @@ public partial class MainWindow : Window
 
     private void OnNavButtonClick(object sender, RoutedEventArgs e)
     {
-        if (sender is RadioButton button
+        if (sender is Button button
             && int.TryParse(button.Tag?.ToString(), out int index))
         {
             SwitchPage(index);
@@ -39,11 +44,13 @@ public partial class MainWindow : Window
 
     private void SwitchPage(int index)
     {
+        // 刷新左侧选中高亮
         for (int i = 0; i < _navButtons.Length; i++)
         {
-            ((ToggleButton)_navButtons[i]).IsChecked = (i == index);
+            _navButtons[i].Background = i == index ? _selectedNavBrush : _defaultNavBrush;
         }
 
+        // 主页已接入独立 UserControl；其余页面暂用占位文本
         MainContent.Content = index switch
         {
             0 => new Views.HomeView(),
@@ -69,14 +76,19 @@ public partial class MainWindow : Window
 
     private void OnHideClick(object sender, RoutedEventArgs e)
     {
+        // 隐藏窗口：最小化（后续可改为隐藏到系统托盘）
         WindowState = WindowState.Minimized;
     }
 
     private void OnExitClick(object sender, RoutedEventArgs e)
     {
+        // 退出应用
         Application.Current.Shutdown();
     }
 
+    /// <summary>
+    /// 显示或隐藏背景暗化遮罩（弹窗弹出时调用）。
+    /// </summary>
     public void ShowDimOverlay(bool isVisible)
     {
         DimOverlay.Visibility = isVisible ? Visibility.Visible : Visibility.Collapsed;
@@ -84,8 +96,9 @@ public partial class MainWindow : Window
 
     private void OnSidebar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
+        // 点击在导航按钮上时不触发窗口拖动（按钮自行处理点击）。
         if (e.OriginalSource is DependencyObject source
-            && FindAncestor<RadioButton>(source) is not null)
+            && FindAncestor<Button>(source) is not null)
         {
             return;
         }
@@ -98,6 +111,7 @@ public partial class MainWindow : Window
             }
             catch (InvalidOperationException)
             {
+                // 窗口处于少数不允许拖动的状态（如刚最小化）时忽略，避免程序异常退出。
             }
         }
     }

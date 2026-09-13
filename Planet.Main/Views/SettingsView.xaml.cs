@@ -28,19 +28,19 @@ public partial class SettingsView : UserControl
     /// <summary>主题按钮点击：仅记录日志并更新选中状态提示。</summary>
     private void OnThemeButtonClick(object sender, RoutedEventArgs e)
     {
-        if (sender is RadioButton button)
+        if (sender is Button button)
         {
             // 清除其他按钮的选中状态
             foreach (var child in ThemeWrapPanel.Children)
             {
-                if (child is RadioButton b)
+                if (child is Button b)
                 {
                     b.Tag = null;
                 }
             }
 
             // 设置当前按钮为选中
-            button.IsChecked = true;
+            button.Tag = "Selected";
 
             string themeName = button.Content?.ToString() ?? "未知";
             CurrentThemeText.Text = $"当前选中：{themeName}";
