@@ -242,15 +242,15 @@
                             <ColumnDefinition Width="Auto" MinWidth="90" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Text="悬浮球模式" Style="{StaticResource SettingLabelStyle}" />
+                        <TextBlock Grid.Column="0" Text="自动隐藏模式" Style="{StaticResource SettingLabelStyle}" />
                         <CheckBox Grid.Column="1"
-                                  x:Name="FloatingBallCheck"
+                                  x:Name="AutoHideCheck"
                                   Content="开启"
                                   FontSize="13"
                                   Foreground="#444A53"
                                   VerticalAlignment="Center"
-                                  Checked="OnFloatingBallToggled"
-                                  Unchecked="OnFloatingBallToggled" />
+                                  Checked="OnAutoHideToggled"
+                                  Unchecked="OnAutoHideToggled" />
                     </Grid>
 
                     <TextBlock x:Name="VisualHintText"

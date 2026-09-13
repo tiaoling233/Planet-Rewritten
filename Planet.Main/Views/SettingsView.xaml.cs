@@ -1,4 +1,4 @@
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using Planet.Main.Services;
 
@@ -21,7 +21,7 @@ public partial class SettingsView : UserControl
         // 初始化主题选中提示
         CurrentThemeText.Text = "当前选中：默认";
         SettingsHintText.Text = "加速网站前缀将用于 Github 资源下载，如 ghproxy.dev/";
-        VisualHintText.Text = "修改后重启应用生效";
+        VisualHintText.Text = "提示：标签页选择器可独立于主窗口，支持合并/独立模式，位置可设为上/下/左/右。";
         LogService.Info("设置页已加载");
     }
 
@@ -94,10 +94,10 @@ public partial class SettingsView : UserControl
         }
     }
 
-    /// <summary>悬浮球模式开关：记录日志。</summary>
-    private void OnFloatingBallToggled(object sender, RoutedEventArgs e)
+    /// <summary>自动隐藏模式开关：记录日志。</summary>
+    private void OnAutoHideToggled(object sender, RoutedEventArgs e)
     {
-        bool isChecked = FloatingBallCheck.IsChecked == true;
-        LogService.Info($"悬浮球模式：{(isChecked ? "开启" : "关闭")}");
+        bool isChecked = AutoHideCheck.IsChecked == true;
+        LogService.Info($"自动隐藏模式：{(isChecked ? "开启" : "关闭")}");
     }
 }
