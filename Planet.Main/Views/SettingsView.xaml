@@ -9,7 +9,7 @@
              d:DesignWidth="700">
 
     <UserControl.Resources>
-        <!-- 设置页卡片样式（与 InfoView 一致） -->
+        <!-- 设置页卡片样式（与 InfoView 一致：圆角 12、白底、浅灰描边） -->
         <Style x:Key="SettingsCardStyle" TargetType="Border">
             <Setter Property="CornerRadius" Value="12" />
             <Setter Property="Background" Value="White" />
@@ -75,31 +75,17 @@
             </Setter>
         </Style>
 
-        <!-- 设置页文本框 -->
-        <Style x:Key="SettingsTextBoxStyle" TargetType="TextBox">
-            <Setter Property="FontSize" Value="13" />
-            <Setter Property="Padding" Value="10,7" />
-            <Setter Property="BorderBrush" Value="#D1D5DB" />
-            <Setter Property="BorderThickness" Value="1" />
-            <Setter Property="VerticalContentAlignment" Value="Center" />
-        </Style>
-
-        <!-- 设置页下拉框 -->
-        <Style x:Key="SettingsComboBoxStyle" TargetType="ComboBox">
-            <Setter Property="FontSize" Value="13" />
-            <Setter Property="Padding" Value="10,7" />
-            <Setter Property="MinWidth" Value="160" />
-            <Setter Property="VerticalContentAlignment" Value="Center" />
-        </Style>
-
-        <!-- 设置页通用按钮（检查更新等） -->
+        <!-- 检查更新按钮：蓝色圆角，高度与输入框对齐 -->
         <Style x:Key="SettingsButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="#3E6F96" />
             <Setter Property="Foreground" Value="White" />
             <Setter Property="BorderThickness" Value="0" />
-            <Setter Property="Padding" Value="16,8" />
+            <Setter Property="Padding" Value="16,0" />
+            <Setter Property="MinWidth" Value="88" />
+            <Setter Property="Height" Value="36" />
             <Setter Property="Cursor" Value="Hand" />
             <Setter Property="FontSize" Value="13" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
@@ -107,8 +93,7 @@
                                 Background="{TemplateBinding Background}"
                                 CornerRadius="8"
                                 SnapsToDevicePixels="True">
-                            <ContentPresenter Margin="{TemplateBinding Padding}"
-                                              HorizontalAlignment="Center"
+                            <ContentPresenter HorizontalAlignment="Center"
                                               VerticalAlignment="Center" />
                         </Border>
                         <ControlTemplate.Triggers>
@@ -138,8 +123,7 @@
                        HorizontalAlignment="Center" />
 
             <!-- ============ 卡片一：主题设置 ============ -->
-            <Border Style="{StaticResource SettingsCardStyle}"
-                    Margin="0,24,0,0">
+            <Border Style="{StaticResource SettingsCardStyle}" Margin="0,24,0,0">
                 <StackPanel>
                     <TextBlock Text="主题设置" Style="{StaticResource CardTitleStyle}" />
 
@@ -177,7 +161,7 @@
                         <TextBlock Grid.Column="0" Text="下载源" Style="{StaticResource SettingLabelStyle}" Margin="0,0,12,0" />
                         <ComboBox Grid.Column="1"
                                   x:Name="DownloadSourceCombo"
-                                  Style="{StaticResource SettingsComboBoxStyle}"
+                                  Height="36"
                                   SelectionChanged="OnDownloadSourceChanged">
                             <ComboBoxItem Content="Gitee"  IsSelected="True" />
                             <ComboBoxItem Content="Github" />
@@ -194,7 +178,9 @@
                         <TextBlock Grid.Column="0" Text="加速网站" Style="{StaticResource SettingLabelStyle}" Margin="0,0,12,0" />
                         <TextBox Grid.Column="1"
                                  x:Name="ProxyTextBox"
-                                 Style="{StaticResource SettingsTextBoxStyle}"
+                                 Height="36"
+                                 VerticalContentAlignment="Center"
+                                 Padding="10,0"
                                  TextChanged="OnProxyTextChanged" />
                         <Button Grid.Column="2"
                                 Content="检查更新"
@@ -225,7 +211,7 @@
                         <TextBlock Grid.Column="0" Text="显示模式" Style="{StaticResource SettingLabelStyle}" />
                         <ComboBox Grid.Column="1"
                                   x:Name="DisplayModeCombo"
-                                  Style="{StaticResource SettingsComboBoxStyle}"
+                                  Height="36"
                                   SelectionChanged="OnDisplayModeChanged">
                             <ComboBoxItem Content="合并" IsSelected="True" />
                             <ComboBoxItem Content="独立" />
@@ -241,7 +227,7 @@
                         <TextBlock Grid.Column="0" Text="位置" Style="{StaticResource SettingLabelStyle}" />
                         <ComboBox Grid.Column="1"
                                   x:Name="PositionCombo"
-                                  Style="{StaticResource SettingsComboBoxStyle}"
+                                  Height="36"
                                   SelectionChanged="OnPositionChanged">
                             <ComboBoxItem Content="左" IsSelected="True" />
                             <ComboBoxItem Content="上" />
