@@ -8,6 +8,7 @@
     <UseWPF>true</UseWPF>
     <AssemblyName>Planet.Main</AssemblyName>
     <RootNamespace>Planet.Main</RootNamespace>
+    <ApplicationIcon>Assets\planet.ico</ApplicationIcon>
     <Version>3.0.0</Version>
     <Product>Planet</Product>
     <Description>Planet 软件本体（便携版随启动器发布，位于 Data 文件夹内）。</Description>
@@ -15,6 +16,7 @@
 
   <ItemGroup>
     <Compile Include="..\Shared\AppLayout.cs" Link="Shared\AppLayout.cs" />
+    <Resource Include="Assets\planet.ico" />
   </ItemGroup>
 
   <ItemGroup>
