@@ -1,56 +1,15 @@
-﻿<Application x:Class="Planet.Main.App"
+<Application x:Class="Planet.Main.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:Planet.Main"
              StartupUri="MainWindow.xaml">
-        <Application.Resources>
+    <Application.Resources>
         <ResourceDictionary>
             <!-- HandyControl 主题：SkinDefault(画刷) 在前，Theme(样式) 在后，顺序不可调换 -->
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/SkinDefault.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/Theme.xaml" />
             </ResourceDictionary.MergedDictionaries>
-
-            <!-- 全局圆角按钮样式：弹窗、??? 页等功能按钮统一使用 -->
-            <Style x:Key="RoundedButtonStyle" TargetType="Button">
-                <Setter Property="Height" Value="32" />
-                <Setter Property="Padding" Value="22,0" />
-                <Setter Property="Background" Value="#3E6F96" />
-                <Setter Property="Foreground" Value="White" />
-                <Setter Property="BorderThickness" Value="0" />
-                <Setter Property="FontSize" Value="13" />
-                <Setter Property="Cursor" Value="Hand" />
-                <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="Button">
-                            <!-- 悬浮/按下采用半透明黑色叠加层：任意底色（蓝/红/自定义）都会自然变深 -->
-                            <Border Background="{TemplateBinding Background}"
-                                    CornerRadius="6"
-                                    SnapsToDevicePixels="True">
-                                <Grid>
-                                    <ContentPresenter HorizontalAlignment="Center"
-                                                      VerticalAlignment="Center"
-                                                      Margin="{TemplateBinding Padding}" />
-                                    <!-- 叠加层：默认透明，悬浮/按下时变为半透明黑 -->
-                                    <Border x:Name="HoverOverlay"
-                                            Background="Transparent"
-                                            CornerRadius="6"
-                                            IsHitTestVisible="False" />
-                                </Grid>
-                            </Border>
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter TargetName="HoverOverlay" Property="Background" Value="#26000000" />
-                                </Trigger>
-                                <Trigger Property="IsPressed" Value="True">
-                                    <Setter TargetName="HoverOverlay" Property="Background" Value="#40000000" />
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

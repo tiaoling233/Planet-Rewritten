@@ -17,84 +17,10 @@
         WindowStartupLocation="CenterScreen">
 
     <Window.Resources>
-        <!-- 颜色占位：主题系统在后续阶段接入后统一替换 -->
         <SolidColorBrush x:Key="SidebarBrush" Color="#23272F" />
-        <SolidColorBrush x:Key="SidebarHoverBrush" Color="#303642" />
-        <SolidColorBrush x:Key="SidebarPressedBrush" Color="#3A4250" />
         <SolidColorBrush x:Key="SidebarTextBrush" Color="#C7CDD6" />
-        <SolidColorBrush x:Key="SidebarSelectedBrush" Color="#3E6F96" />
         <SolidColorBrush x:Key="ContentBrush" Color="#F5F6F8" />
         <SolidColorBrush x:Key="PageTextBrush" Color="#444A53" />
-
-        <!-- 左侧导航按钮：圆角 + 鼠标悬浮/按下变色 -->
-        <Style x:Key="NavButtonStyle" TargetType="Button">
-            <Setter Property="Foreground" Value="{StaticResource SidebarTextBrush}" />
-            <Setter Property="Background" Value="Transparent" />
-            <Setter Property="BorderThickness" Value="0" />
-            <Setter Property="Height" Value="40" />
-            <Setter Property="Margin" Value="10,3" />
-            <Setter Property="Padding" Value="14,0" />
-            <Setter Property="FontFamily" Value="Segoe UI, Microsoft YaHei UI, Segoe UI Emoji" />
-            <Setter Property="FontSize" Value="14" />
-            <Setter Property="HorizontalContentAlignment" Value="Left" />
-            <Setter Property="VerticalContentAlignment" Value="Center" />
-            <Setter Property="Cursor" Value="Hand" />
-            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border x:Name="Bg"
-                                Background="{TemplateBinding Background}"
-                                CornerRadius="8"
-                                SnapsToDevicePixels="True">
-                            <ContentPresenter Margin="{TemplateBinding Padding}"
-                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Bg" Property="Background" Value="{StaticResource SidebarHoverBrush}" />
-                                <Setter Property="Foreground" Value="#FFFFFF" />
-                            </Trigger>
-                            <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="Bg" Property="Background" Value="{StaticResource SidebarPressedBrush}" />
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <!-- ===== SVG 图标（源：ref/svgicon0.txt，viewBox 0 0 1024 1024；Fill 绑定宿主前景色以跟随主题/hover）===== -->
-        <!-- Planet 图标：仅用于顶部标题（StackPanel 无 Foreground 属性，故直接取标题文字同色） -->
-        <Viewbox x:Key="IconPlanet" Width="20" Height="20" Stretch="Uniform">
-            <Path Fill="#9AA3AF"
-                  Data="M512 861.090909c192.791273 0 349.090909-156.299636 349.090909-349.090909 0-192.791273-156.299636-349.090909-349.090909-349.090909-192.791273 0-349.090909 156.299636-349.090909 349.090909 0 192.791273 156.299636 349.090909 349.090909 349.090909z m0 69.818182c-231.354182 0-418.909091-187.554909-418.909091-418.909091S280.645818 93.090909 512 93.090909s418.909091 187.554909 418.909091 418.909091-187.554909 418.909091-418.909091 418.909091z M131.304727 679.098182l61.393455 33.28c-35.746909 66.001455-44.055273 110.848-34.420364 120.482909 10.612364 10.612364 61.137455-0.302545 133.864727-41.844364 82.944-47.406545 182.295273-126.208 277.550546-221.463272s174.056727-194.606545 221.463273-277.550546c41.541818-72.727273 52.456727-123.229091 41.844363-133.841454-9.751273-9.751273-55.156364-1.186909-121.832727 35.118545L677.794909 131.956364c92.439273-50.338909 163.933091-63.813818 204.567273-23.179637 76.683636 76.683636-47.965091 294.818909-263.307637 510.138182-215.319273 215.342545-433.454545 339.991273-510.138181 263.307636-40.448-40.424727-27.275636-111.383273 22.388363-203.10109z" />
-        </Viewbox>
-        <Viewbox x:Key="IconHome" Width="20" Height="20" Stretch="Uniform">
-            <Path Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
-                  Data="M854 512.9c-20.9 0-37.7 16.9-37.7 37.7v240.6c0 85.6-69.6 155.2-155.2 155.2H362.9c-85.6 0-155.2-69.6-155.2-155.2V550.6c0-20.9-16.9-37.7-37.7-37.7s-37.7 16.9-37.7 37.7v240.6c0 127.2 103.5 230.7 230.7 230.7h298.1c127.2 0 230.7-103.5 230.7-230.7V550.6c0-20.8-16.9-37.7-37.8-37.7zM1012.2 430L596.7 35.9c-47.5-45.1-121.9-45.1-169.5 0L11.8 430c-15.1 14.3-15.8 38.2-1.4 53.4 14.4 15.1 38.2 15.8 53.4 1.4L479.2 90.6c18.4-17.4 47.2-17.4 65.5 0l415.5 394.1c7.3 6.9 16.6 10.4 26 10.4 10 0 20-4 27.4-11.8 14.4-15.1 13.8-39-1.4-53.3z" />
-        </Viewbox>
-        <Viewbox x:Key="IconFunct" Width="20" Height="20" Stretch="Uniform">
-            <Path Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
-                  Data="M184.32 411.694V193.13l218.453-0.11 0.11 218.563-218.563 0.11z m218.563-291.38H184.21a72.818 72.818 0 0 0-72.709 72.744V411.73a72.818 72.818 0 0 0 72.709 72.708h218.672a72.818 72.818 0 0 0 72.708-72.744V193.058a72.818 72.818 0 0 0-72.708-72.708zM184.32 848.6V630.038l218.453-0.11 0.11 218.563-218.563 0.11z m218.563-291.38H184.21a72.818 72.818 0 0 0-72.709 72.745v218.672a72.818 72.818 0 0 0 72.709 72.708h218.672A72.818 72.818 0 0 0 475.59 848.6V629.965a72.818 72.818 0 0 0-72.708-72.709z m327.643-100.27L575.97 302.394l154.41-154.556 154.63 154.447L730.525 456.95z m205.965-205.965L781.863 96.356a72.818 72.818 0 0 0-102.819 0L524.415 250.948a72.199 72.199 0 0 0-21.226 51.264 72.199 72.199 0 0 0 21.226 51.555l154.629 154.665a72.709 72.709 0 0 0 102.819-0.036L936.49 353.767a72.745 72.745 0 0 0 0-102.819zM621.227 848.6V630.038l218.453-0.11 0.11 218.563-218.563 0.11z m218.562-291.38H621.117a72.818 72.818 0 0 0-72.708 72.745v218.672a72.818 72.818 0 0 0 72.708 72.708H839.79a72.818 72.818 0 0 0 72.709-72.745V629.965a72.818 72.818 0 0 0-72.709-72.709z" />
-        </Viewbox>
-        <Viewbox x:Key="IconMystery" Width="20" Height="20" Stretch="Uniform">
-            <Path Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
-                  Data="M577.376 438.912l24.352 15.68-24.32-15.68z m-171.136-41.728a28.96 28.96 0 0 0 57.92 0h-57.92z m77.216 173.728a28.96 28.96 0 0 0 57.92 0h-57.92z m57.92 96.512a28.96 28.96 0 0 0-57.92 0h57.92z m-57.92 38.592a28.96 28.96 0 0 0 57.92 0h-57.92zM245.184 259.712l14.784 24.96-14.784-24.96z m0 506.56l14.784-24.928-14.784 24.96z m347.456 110.72l-14.752-24.928 14.72 24.96z m-160.448 0l-14.784 24.928 14.784-24.896z m347.424-110.72l14.752 24.928-14.72-24.896z m0-506.56l-14.784 24.96 14.784-24.96z m-186.976-110.72l-14.752 24.96 14.72-24.96z m-160.448 0l-14.784-24.896 14.784 24.896z m128.48 248.192c0 9.664-2.816 18.56-7.68 26.048l48.736 31.36a105.92 105.92 0 0 0 16.832-57.408h-57.92z m-96.512 0c0-26.656 21.6-48.256 48.256-48.256v-57.92a106.144 106.144 0 0 0-106.176 106.176h57.92z m48.256-48.256c26.624 0 48.256 21.632 48.256 48.256h57.92a106.144 106.144 0 0 0-106.176-106.176v57.92z m-28.96 202.688v19.296h57.92v-19.296h-57.92z m69.568-128.384c-4.864 7.584-10.944 15.36-18.08 24.256-6.88 8.544-14.88 18.24-22.112 28.16-14.24 19.584-29.376 45.12-29.376 75.968h57.92c0-11.776 5.76-24.704 18.272-41.856 6.144-8.448 12.896-16.64 20.384-25.92 7.232-8.96 15.04-18.88 21.696-29.248l-48.704-31.36z m-69.568 244.16v38.624h57.92v-38.592h-57.92z m94.4-493.44l186.976 110.72 29.536-49.856-186.944-110.72-29.536 49.824z m253.056 228.32v221.44h57.92v-221.44h-57.92zM764.8 741.344l-186.944 110.72 29.536 49.856 186.944-110.72-29.536-49.856z m-317.888 110.72l-186.976-110.72-29.536 49.856 186.976 110.72 29.536-49.856zM193.92 623.712v-221.44H136v221.44h57.92zM259.968 284.64l186.976-110.72-29.536-49.824L230.4 234.816l29.536 49.824zM193.92 402.272c0-48.832 25.376-93.568 66.048-117.632L230.4 234.816C171.776 269.568 136 333.44 136 402.24h57.92z m66.048 339.072c-40.64-24.032-66.048-68.8-66.048-117.632H136c0 68.8 35.776 132.736 94.4 167.488l29.568-49.856z m317.92 110.72a127.84 127.84 0 0 1-130.944 0l-29.536 49.856a186.048 186.048 0 0 0 190.016 0l-29.536-49.856z m253.024-228.352c0 48.832-25.408 93.6-66.08 117.632l29.536 49.856c58.656-34.752 94.432-98.688 94.432-167.488h-57.92zM764.8 284.64c40.64 24.064 66.08 68.8 66.08 117.632h57.92c0-68.8-35.84-132.704-94.464-167.456l-29.536 49.824z m-157.44-160.544a186.048 186.048 0 0 0-189.984 0l29.536 49.824a127.84 127.84 0 0 1 130.944 0l29.536-49.824z" />
-        </Viewbox>
-        <Viewbox x:Key="IconInfo" Width="20" Height="20" Stretch="Uniform">
-            <Path Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
-                  Data="M512.50142 958.397886c-119.320573 0-231.499491-46.465265-315.871087-130.837884C112.258737 743.188406 65.792449 631.010511 65.792449 511.688915c0-119.319549 46.466288-231.499491 130.837884-315.871087C281.002952 111.445208 393.180847 64.979944 512.50142 64.979944s231.499491 46.465265 315.871087 130.837884c84.372619 84.372619 130.837884 196.551538 130.837884 315.871087 0 119.321596-46.465265 231.499491-130.837884 315.871087C744.000911 911.932622 631.821993 958.397886 512.50142 958.397886zM512.50142 105.962334c-223.718271 0-405.726581 182.00831-405.726581 405.726581s182.00831 405.726581 405.726581 405.726581c223.718271 0 405.727605-182.00831 405.727605-405.726581S736.220714 105.962334 512.50142 105.962334z M510.150886 775.953647c-18.107403 0-32.745798-14.678304-32.745798-32.785707L477.405087 452.191846c0-18.108426 14.638395-32.785707 32.745798-32.785707 18.107403 0 32.745798 14.678304 32.745798 32.785707l0 290.976094C542.896684 761.275343 528.258289 775.953647 510.150886 775.953647z M511.357364 296.458969m-45.080731 0a44.054 44.054 0 1 0 90.161463 0 44.054 44.054 0 1 0-90.161463 0Z" />
-        </Viewbox>
-        <Viewbox x:Key="IconHide" Width="20" Height="20" Stretch="Uniform">
-            <Path Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
-                  Data="M128 448h768v128H128z" />
-        </Viewbox>
-        <Viewbox x:Key="IconExit" Width="20" Height="20" Stretch="Uniform">
-            <Path Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
-                  Data="M1022.583467 127.803733 894.779733 0 511.291733 383.4624 127.8464 0 0 127.803733 383.496533 511.274667 0 894.737067 127.8464 1022.5408 511.291733 639.0784 894.779733 1022.5408 1022.583467 894.737067 639.138133 511.274667Z" />
-        </Viewbox>
     </Window.Resources>
 
     <Grid>
@@ -103,7 +29,6 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <!-- ============ 左侧标签栏（固定 200px） ============ -->
         <Grid Grid.Column="0"
               Background="{StaticResource SidebarBrush}"
               MouseLeftButtonDown="OnSidebar_MouseLeftButtonDown">
@@ -114,71 +39,68 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <!-- 顶部：应用图标（SVG）+ 标题；空白区可拖拽窗口 -->
-            <StackPanel Grid.Row="0"
-                        Orientation="Horizontal"
-                        Margin="20,0"
-                        VerticalAlignment="Center">
-                <StaticResource ResourceKey="IconPlanet" />
-                <TextBlock Text="Planet"
-                           Margin="8,0,0,0"
-                           VerticalAlignment="Center"
-                           Foreground="#9AA3AF"
-                           FontSize="13"
-                           FontWeight="SemiBold" />
-            </StackPanel>
+            <TextBlock Grid.Row="0"
+                       Text="Planet"
+                       Margin="20,0"
+                       VerticalAlignment="Center"
+                       Foreground="#9AA3AF"
+                       FontSize="13"
+                       FontWeight="SemiBold" />
 
-            <!-- 五个导航按钮（SVG 图标 + 文本，图标颜色跟随 Foreground / hover 变色） -->
             <StackPanel Grid.Row="1">
-                <Button x:Name="BtnHome"
-                        Style="{StaticResource NavButtonStyle}"
-                        Tag="0" Click="OnNavButtonClick"
-                        AutomationProperties.Name="主页">
+                <RadioButton x:Name="BtnHome"
+                             GroupName="NavGroup"
+                             IsChecked="True"
+                             Style="{StaticResource {x:Type ToggleButton}}"
+                             Tag="0" Click="OnNavButtonClick"
+                             AutomationProperties.Name="主页">
                     <StackPanel Orientation="Horizontal">
                         <StaticResource ResourceKey="IconHome" />
                         <TextBlock Text="主页" Margin="9,0,0,0" VerticalAlignment="Center" />
                     </StackPanel>
-                </Button>
-                <Button x:Name="BtnFunct"
-                        Style="{StaticResource NavButtonStyle}"
-                        Tag="1" Click="OnNavButtonClick"
-                        AutomationProperties.Name="功能">
+                </RadioButton>
+                <RadioButton x:Name="BtnFunct"
+                             GroupName="NavGroup"
+                             Style="{StaticResource {x:Type ToggleButton}}"
+                             Tag="1" Click="OnNavButtonClick"
+                             AutomationProperties.Name="功能">
                     <StackPanel Orientation="Horizontal">
-                        <StaticResource ResourceKey="IconFunct" />
+                        <StaticResource ResourceKey="IconFunction" />
                         <TextBlock Text="功能" Margin="9,0,0,0" VerticalAlignment="Center" />
                     </StackPanel>
-                </Button>
-                <Button x:Name="BtnMystery"
-                        Style="{StaticResource NavButtonStyle}"
-                        Tag="2" Click="OnNavButtonClick"
-                        AutomationProperties.Name="???">
+                </RadioButton>
+                <RadioButton x:Name="BtnMystery"
+                             GroupName="NavGroup"
+                             Style="{StaticResource {x:Type ToggleButton}}"
+                             Tag="2" Click="OnNavButtonClick"
+                             AutomationProperties.Name="???">
                     <StackPanel Orientation="Horizontal">
                         <StaticResource ResourceKey="IconMystery" />
                         <TextBlock Text="???" Margin="9,0,0,0" VerticalAlignment="Center" />
                     </StackPanel>
-                </Button>
-                <Button x:Name="BtnInfo"
-                        Style="{StaticResource NavButtonStyle}"
-                        Tag="3" Click="OnNavButtonClick"
-                        AutomationProperties.Name="信息">
+                </RadioButton>
+                <RadioButton x:Name="BtnInfo"
+                             GroupName="NavGroup"
+                             Style="{StaticResource {x:Type ToggleButton}}"
+                             Tag="3" Click="OnNavButtonClick"
+                             AutomationProperties.Name="信息">
                     <StackPanel Orientation="Horizontal">
                         <StaticResource ResourceKey="IconInfo" />
                         <TextBlock Text="信息" Margin="9,0,0,0" VerticalAlignment="Center" />
                     </StackPanel>
-                </Button>
-                <!-- 注意：ref/svgicon0.txt 未提供“设置”图标（仅 7 个），暂用 Emoji 占位，待补充 SVG 后替换 -->
-                <Button x:Name="BtnSettings"
-                        Style="{StaticResource NavButtonStyle}"
-                        Tag="4" Click="OnNavButtonClick"
-                        AutomationProperties.Name="设置">
+                </RadioButton>
+                <RadioButton x:Name="BtnSettings"
+                             GroupName="NavGroup"
+                             Style="{StaticResource {x:Type ToggleButton}}"
+                             Tag="4" Click="OnNavButtonClick"
+                             AutomationProperties.Name="设置">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="⚙️" Margin="1,0,0,0" VerticalAlignment="Center" FontSize="14" />
                         <TextBlock Text="设置" Margin="9,0,0,0" VerticalAlignment="Center" />
                     </StackPanel>
-                </Button>
+                </RadioButton>
             </StackPanel>
 
-            <!-- 底部：隐藏 / 退出（SVG 图标，AutomationProperties.Name 保证可访问性与 UIA 可测） -->
             <Grid Grid.Row="3" Margin="10,0,10,12">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
@@ -186,7 +108,6 @@
                 </Grid.ColumnDefinitions>
                 <Button x:Name="BtnHide"
                         Grid.Column="0"
-                        Style="{StaticResource NavButtonStyle}"
                         HorizontalContentAlignment="Center"
                         Margin="0,3,5,0"
                         AutomationProperties.Name="隐藏"
@@ -198,7 +119,6 @@
                 </Button>
                 <Button x:Name="BtnExit"
                         Grid.Column="1"
-                        Style="{StaticResource NavButtonStyle}"
                         HorizontalContentAlignment="Center"
                         Margin="5,3,0,0"
                         AutomationProperties.Name="退出"
@@ -211,14 +131,12 @@
             </Grid>
         </Grid>
 
-        <!-- ============ 右侧主内容区（占满剩余空间） ============ -->
         <Grid Grid.Column="1" Background="{StaticResource ContentBrush}">
             <ContentControl x:Name="MainContent"
                             HorizontalContentAlignment="Stretch"
                             VerticalContentAlignment="Stretch" />
         </Grid>
 
-        <!-- 背景暗化遮罩：弹窗弹出时覆盖全部内容（Panel.ZIndex 确保在最顶层） -->
         <Border x:Name="DimOverlay"
                 Grid.ColumnSpan="2"
                 Background="#80000000"

@@ -28,7 +28,7 @@
 
             <Button x:Name="LuckyButton"
                     Content="🎲 今日人品"
-                    Style="{StaticResource RoundedButtonStyle}"
+                    
                     Width="150"
                     Height="40"
                     Click="OnLuckyButtonClick" />
@@ -36,7 +36,7 @@
             <!-- 千万别点：红色边框 + 红色文本警示按钮 -->
             <Button x:Name="DoNotClickButton"
                     Content="⚠️ 千万别点"
-                    Style="{StaticResource RoundedButtonStyle}"
+                    
                     Width="150"
                     Height="40"
                     Margin="0,14,0,0"
