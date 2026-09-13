@@ -6,12 +6,9 @@
 ## ✨ 功能总览
 
 - **主页**：问候语、日期时间、用户信息（按当前时间动态显示）
-- **功能页**：快捷跳转、搜索、音乐播放、计算器、键盘宏、摩斯密码编解码，支持插件扩展
-- **??? 页**：回声洞、今日人品、千万别点（彩蛋）、调试模式
-- **信息页**：开发者信息、致谢名单、开源声明
-- **设置页**：主题（支持插件与自定义）、下载源（Gitee / GitHub + 加速站）、界面视效等
-- **全局键盘监听**：四个输入触发彩蛋（节奏狗生 / Samurai. / B.B.K.K.B.K.K. / 67）
-- **插件系统**：功能型插件（Applets）与非功能型插件（Extensions），内置插件市场
+- **??? 页**：今日人品、千万别点（彩蛋）
+- **信息页**：开发者信息、致谢名单、开源声明（可展开卡片）
+- **设置页**：主题设置、下载源设置、标签页选择器视效
 
 > 完整的开发任务清单见 `ref/todo.md`（位于仓库外的原始参考材料，仅存档不修改）。
 
@@ -26,7 +23,7 @@
 
 - **语言/平台**：C# 12 / .NET 8
 - **UI 框架**：WPF（XAML），`net8.0-windows` 目标框架
-- **第三方依赖**：暂无（SVG 渲染解决方案在后续阶段评估引入）
+- **第三方依赖**：[HandyControl](https://github.com/HandyOrg/HandyControl) 3.5.1（现代化 UI 控件库）
 - **版本管理**：Git；编译输出与本地缓存一律不入库
 
 ## 📁 目录结构
@@ -40,7 +37,8 @@ D:\AAAPlanet-Rewritten\
 │   ├── Planet.sln       # 解决方案
 │   ├── Planet.Launcher\ # 启动器工程 → 输出 Planet.exe
 │   ├── Planet.Main\     # 软件本体工程 → 输出 Planet.Main.exe
-│   │   ├── Services\    # AppPaths / LogService / SettingsService
+│   │   ├── Services\    # AppPaths / LogService / SettingsService / NotificationService
+│   │   ├── Views\       # HomeView / MysteryView / InfoView / SettingsView / PlanetPopupWindow / ToastWindow
 │   │   ├── App.xaml     # 应用入口
 │   │   └── MainWindow.xaml
 │   ├── Shared\          # 跨工程共享代码（如目录布局约定 AppLayout）
