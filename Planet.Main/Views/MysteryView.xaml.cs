@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using Planet.Main;
+using Planet.Main.Services;
 
 namespace Planet.Main.Views;
 
@@ -89,32 +90,7 @@ public partial class MysteryView : UserControl
         // 仅“确认”(0) 与“确...认？”(1) 触发随机彩蛋；“何意味？”(2) / “我要下车！”(3) 直接关闭
         if (popup.DialogResult == true && popup.SelectedButtonIndex is 0 or 1)
         {
-            TriggerRandomEgg(mainWindow);
-        }
-    }
-
-    /// <summary>随机彩蛋占位：蓝色信息提醒弹窗（正式彩蛋后续接入）。</summary>
-    private static void TriggerRandomEgg(MainWindow? mainWindow)
-    {
-        var eggPopup = new PlanetPopupWindow
-        {
-            Owner = mainWindow,
-            TitleText = "信息",
-            MessageText = "（占位）随机彩蛋已触发！",
-            ButtonTexts = new List<string> { "确定" },
-            TitleForeground = new SolidColorBrush(Color.FromRgb(0x2B, 0x6C, 0xB0)),
-            DividerBrush = new SolidColorBrush(Color.FromRgb(0x2B, 0x6C, 0xB0)),
-            PopupBackground = new SolidColorBrush(Color.FromRgb(0xEA, 0xF3, 0xFC)),
-        };
-
-        mainWindow?.ShowDimOverlay(true);
-        try
-        {
-            eggPopup.ShowDialog();
-        }
-        finally
-        {
-            mainWindow?.ShowDimOverlay(false);
+            NotificationService.ShowMessage("随机彩蛋已触发！", ToastType.Blue);
         }
     }
 
