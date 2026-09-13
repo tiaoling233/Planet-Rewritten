@@ -57,7 +57,10 @@
     </UserControl.Resources>
 
     <!-- 信息页：开发者信息 + 致谢名单/开源声明 可展开卡片 -->
-    <ScrollViewer VerticalScrollBarVisibility="Auto">
+    <!-- 悬浮式滚动条：HandyControl 主题（App.xaml 全局合并）中含针对原生 ScrollViewer 的隐式样式，
+         滚动条覆在内容上方、不占据布局列，鼠标悬浮时淡入；全应用所有页面统一生效，无需逐页设置样式 -->
+    <ScrollViewer VerticalScrollBarVisibility="Auto"
+                  HorizontalScrollBarVisibility="Disabled">
         <StackPanel MaxWidth="640"
                     Margin="32,24,32,24"
                     HorizontalAlignment="Center">

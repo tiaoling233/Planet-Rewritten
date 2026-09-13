@@ -17,4 +17,8 @@
     <Compile Include="..\Shared\AppLayout.cs" Link="Shared\AppLayout.cs" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="HandyControl" Version="3.5.1" />
+  </ItemGroup>
+
 </Project>
