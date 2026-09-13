@@ -33,6 +33,7 @@
             <Setter Property="Foreground" Value="#5A6270" />
             <Setter Property="VerticalAlignment" Value="Center" />
         </Style>
+
         <!-- 主题按钮：圆角 8，悬浮浅灰，选中高亮 -->
         <Style x:Key="ThemeButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="Transparent" />
@@ -75,7 +76,7 @@
             </Setter>
         </Style>
 
-        <!-- 检查更新按钮：蓝色圆角，高度与输入框对齐 -->
+        <!-- 检查更新按钮：蓝色圆角，高度 36 与输入框对齐 -->
         <Style x:Key="SettingsButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="#3E6F96" />
             <Setter Property="Foreground" Value="White" />
@@ -108,8 +109,128 @@
                 </Setter.Value>
             </Setter>
         </Style>
-    </UserControl.Resources>
 
+        <!-- 现代化文本框：白底、浅灰边框、圆角 8 -->
+        <Style x:Key="SettingsTextBoxStyle" TargetType="TextBox">
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="Padding" Value="10,0" />
+            <Setter Property="Height" Value="36" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="Background" Value="White" />
+            <Setter Property="Foreground" Value="#333333" />
+            <Setter Property="BorderBrush" Value="#D1D5DB" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border x:Name="Bg"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="8"
+                                SnapsToDevicePixels="True">
+                            <ScrollViewer x:Name="PART_ContentHost"
+                                          Margin="{TemplateBinding Padding}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                          Focusable="false" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bg" Property="BorderBrush" Value="#9CA3AF" />
+                            </Trigger>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter TargetName="Bg" Property="BorderBrush" Value="#3E6F96" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- 现代化下拉框：白底、浅灰边框、圆角 8、现代箭头 -->
+        <Style x:Key="SettingsComboBoxStyle" TargetType="ComboBox">
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="Height" Value="36" />
+            <Setter Property="Padding" Value="12,0,32,0" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="Background" Value="White" />
+            <Setter Property="Foreground" Value="#333333" />
+            <Setter Property="BorderBrush" Value="#D1D5DB" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBox">
+                        <Grid>
+                            <Border x:Name="Bg"
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="8"
+                                    SnapsToDevicePixels="True">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="32" />
+                                    </Grid.ColumnDefinitions>
+                                    <ContentPresenter Grid.Column="0"
+                                                      x:Name="ContentSite"
+                                                      Margin="{TemplateBinding Padding}"
+                                                      VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                                      HorizontalAlignment="Left"
+                                                      Content="{TemplateBinding SelectionBoxItem}"
+                                                      ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                                      ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}" />
+                                    <ToggleButton Grid.Column="1"
+                                                  x:Name="DropDownToggle"
+                                                  Focusable="false"
+                                                  IsChecked="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
+                                                  ClickMode="Press"
+                                                  Background="Transparent"
+                                                  BorderThickness="0"
+                                                  VerticalAlignment="Center"
+                                                  HorizontalAlignment="Center"
+                                                  Width="20" Height="20">
+                                        <Path x:Name="Arrow"
+                                              Width="10" Height="6"
+                                              Stretch="Uniform"
+                                              Fill="#6B7280"
+                                              Data="M 0,0 L 5,5 L 10,0 Z"
+                                              VerticalAlignment="Center"
+                                              HorizontalAlignment="Center" />
+                                    </ToggleButton>
+                                </Grid>
+                            </Border>
+                            <Popup x:Name="PART_Popup"
+                                   Placement="Bottom"
+                                   IsOpen="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}}"
+                                   AllowsTransparency="True"
+                                   Focusable="False"
+                                   PopupAnimation="Fade">
+                                <Border Background="White"
+                                        BorderBrush="#E5E7EB"
+                                        BorderThickness="1"
+                                        CornerRadius="8"
+                                        MaxHeight="200"
+                                        Margin="0,4,0,0">
+                                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                        <ItemsPresenter />
+                                    </ScrollViewer>
+                                </Border>
+                            </Popup>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bg" Property="BorderBrush" Value="#9CA3AF" />
+                            </Trigger>
+                            <Trigger Property="IsDropDownOpen" Value="True">
+                                <Setter TargetName="Bg" Property="BorderBrush" Value="#3E6F96" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
     <!-- 设置页：三个卡片（主题 / 下载源 / 标签页选择器视效） -->
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel MaxWidth="640"
@@ -161,7 +282,7 @@
                         <TextBlock Grid.Column="0" Text="下载源" Style="{StaticResource SettingLabelStyle}" Margin="0,0,12,0" />
                         <ComboBox Grid.Column="1"
                                   x:Name="DownloadSourceCombo"
-                                  Height="36"
+                                  Style="{StaticResource SettingsComboBoxStyle}"
                                   SelectionChanged="OnDownloadSourceChanged">
                             <ComboBoxItem Content="Gitee"  IsSelected="True" />
                             <ComboBoxItem Content="Github" />
@@ -178,9 +299,7 @@
                         <TextBlock Grid.Column="0" Text="加速网站" Style="{StaticResource SettingLabelStyle}" Margin="0,0,12,0" />
                         <TextBox Grid.Column="1"
                                  x:Name="ProxyTextBox"
-                                 Height="36"
-                                 VerticalContentAlignment="Center"
-                                 Padding="10,0"
+                                 Style="{StaticResource SettingsTextBoxStyle}"
                                  TextChanged="OnProxyTextChanged" />
                         <Button Grid.Column="2"
                                 Content="检查更新"
@@ -211,7 +330,7 @@
                         <TextBlock Grid.Column="0" Text="显示模式" Style="{StaticResource SettingLabelStyle}" />
                         <ComboBox Grid.Column="1"
                                   x:Name="DisplayModeCombo"
-                                  Height="36"
+                                  Style="{StaticResource SettingsComboBoxStyle}"
                                   SelectionChanged="OnDisplayModeChanged">
                             <ComboBoxItem Content="合并" IsSelected="True" />
                             <ComboBoxItem Content="独立" />
@@ -227,7 +346,7 @@
                         <TextBlock Grid.Column="0" Text="位置" Style="{StaticResource SettingLabelStyle}" />
                         <ComboBox Grid.Column="1"
                                   x:Name="PositionCombo"
-                                  Height="36"
+                                  Style="{StaticResource SettingsComboBoxStyle}"
                                   SelectionChanged="OnPositionChanged">
                             <ComboBoxItem Content="左" IsSelected="True" />
                             <ComboBoxItem Content="上" />
@@ -236,7 +355,7 @@
                         </ComboBox>
                     </Grid>
 
-                    <!-- 悬浮球模式 -->
+                    <!-- 自动隐藏模式 -->
                     <Grid Margin="0,14,0,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" MinWidth="90" />
