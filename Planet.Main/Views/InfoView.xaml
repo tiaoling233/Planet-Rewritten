@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl x:Class="Planet.Main.Views.InfoView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             d:DesignHeight="500"
+             d:DesignWidth="700">
+
+    <UserControl.Resources>
+        <!-- 信息页卡片标题按钮：透明底 + 悬浮浅灰 + 圆角 12（与卡片一致） -->
+        <Style x:Key="CardHeaderStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="#2B2F36" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="HorizontalContentAlignment" Value="Left" />
+            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Bg"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="12"
+                                SnapsToDevicePixels="True">
+                            <ContentPresenter />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bg" Property="Background" Value="#F6F8FA" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="Bg" Property="Background" Value="#EEF1F4" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- 卡片正文小标题 -->
+        <Style x:Key="BodyTitleStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Foreground" Value="#5A6270" />
+            <Setter Property="Margin" Value="0,10,0,4" />
+        </Style>
+
+        <!-- 卡片正文条目 -->
+        <Style x:Key="BodyItemStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="Foreground" Value="#444A53" />
+            <Setter Property="Margin" Value="0,2" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+        </Style>
+    </UserControl.Resources>
+
+    <!-- 信息页：开发者信息 + 致谢名单/开源声明 可展开卡片 -->
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel MaxWidth="640"
+                    Margin="32,24,32,24"
+                    HorizontalAlignment="Center">
+
+            <TextBlock Text="信息"
+                       FontSize="28"
+                       FontWeight="SemiBold"
+                       Foreground="#2B2F36"
+                       HorizontalAlignment="Center" />
+
+            <TextBlock Text="关于 Planet 与它的开发者们"
+                       FontSize="13"
+                       Foreground="#9AA0A8"
+                       Margin="0,8,0,24"
+                       HorizontalAlignment="Center" />
+
+            <!-- ============ 开发者信息卡片 ============ -->
+            <Border CornerRadius="12"
+                    Background="White"
+                    BorderBrush="#E3E6EA"
+                    BorderThickness="1"
+                    Padding="18,16">
+                <StackPanel>
+                    <TextBlock Text="开发者信息"
+                               FontSize="15"
+                               FontWeight="SemiBold"
+                               Foreground="#2B2F36" />
+
+                    <Grid Margin="0,12,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" MinWidth="110" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="原版 VBS 作者" Style="{StaticResource BodyTitleStyle}" Margin="0,4" />
+                        <TextBlock Grid.Row="0" Grid.Column="1" Text="乱码vvv" Style="{StaticResource BodyItemStyle}" Margin="0,4" />
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="重写版开发" Style="{StaticResource BodyTitleStyle}" Margin="0,4" />
+                        <TextBlock Grid.Row="1" Grid.Column="1" Text="tiaoling233" Style="{StaticResource BodyItemStyle}" Margin="0,4" />
+                        <TextBlock Grid.Row="2" Grid.Column="0" Text="开发工具" Style="{StaticResource BodyTitleStyle}" Margin="0,4" />
+                        <TextBlock Grid.Row="2" Grid.Column="1" Text="C# / .NET 8 / WPF / VS Code" Style="{StaticResource BodyItemStyle}" Margin="0,4" />
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- ============ 致谢名单卡片（可展开/收起） ============ -->
+            <Border CornerRadius="12"
+                    Background="White"
+                    BorderBrush="#E3E6EA"
+                    BorderThickness="1"
+                    Margin="0,16,0,0">
+                <StackPanel>
+                    <Button x:Name="CreditsHeader"
+                            Style="{StaticResource CardHeaderStyle}"
+                            Click="OnCreditsHeaderClick">
+                        <Grid Margin="18,14">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <!-- 指示箭头：收起朝右(0°)，展开旋转 90° 朝下；颜色跟随按钮前景 -->
+                            <Path Grid.Column="0"
+                                  Width="20" Height="20"
+                                  Data="M 9,5 L 15,11 L 9,17"
+                                  Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
+                                  StrokeThickness="2"
+                                  StrokeStartLineCap="Round"
+                                  StrokeEndLineCap="Round"
+                                  StrokeLineJoin="Round"
+                                  RenderTransformOrigin="0.5,0.5">
+                                <Path.RenderTransform>
+                                    <RotateTransform x:Name="CreditsArrowRotate" Angle="0" />
+                                </Path.RenderTransform>
+                            </Path>
+
+                            <TextBlock Grid.Column="1"
+                                       Text="致谢名单"
+                                       FontSize="15"
+                                       FontWeight="SemiBold"
+                                       Foreground="#2B2F36"
+                                       VerticalAlignment="Center"
+                                       Margin="8,0,0,0" />
+                        </Grid>
+                    </Button>
+
+                    <!-- 卡片内容：初始收起（Height=0），点击标题平滑展开 -->
+                    <Grid x:Name="CreditsBody" Height="0">
+                        <StackPanel Margin="18,2,18,16">
+                            <TextBlock Text="Contributors（贡献者）" Style="{StaticResource BodyTitleStyle}" />
+                            <TextBlock Text="GitHub 上的贡献者们（占位数据，正式接入网络后将实时获取）" Style="{StaticResource BodyItemStyle}" />
+                            <TextBlock Text="感谢每一位提交 Issue 与 PR 的朋友" Style="{StaticResource BodyItemStyle}" />
+
+                            <TextBlock Text="插件开发者" Style="{StaticResource BodyTitleStyle}" />
+                            <TextBlock Text="各插件的作者署名将从插件信息文件中读取（占位数据）" Style="{StaticResource BodyItemStyle}" />
+                            <TextBlock Text="感谢插件生态的每一位创作者" Style="{StaticResource BodyItemStyle}" />
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- ============ 开源声明卡片（可展开/收起，样式与致谢名单一致） ============ -->
+            <Border CornerRadius="12"
+                    Background="White"
+                    BorderBrush="#E3E6EA"
+                    BorderThickness="1"
+                    Margin="0,16,0,0">
+                <StackPanel>
+                    <Button x:Name="LicenseHeader"
+                            Style="{StaticResource CardHeaderStyle}"
+                            Click="OnLicenseHeaderClick">
+                        <Grid Margin="18,14">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <Path Grid.Column="0"
+                                  Width="20" Height="20"
+                                  Data="M 9,5 L 15,11 L 9,17"
+                                  Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
+                                  StrokeThickness="2"
+                                  StrokeStartLineCap="Round"
+                                  StrokeEndLineCap="Round"
+                                  StrokeLineJoin="Round"
+                                  RenderTransformOrigin="0.5,0.5">
+                                <Path.RenderTransform>
+                                    <RotateTransform x:Name="LicenseArrowRotate" Angle="0" />
+                                </Path.RenderTransform>
+                            </Path>
+
+                            <TextBlock Grid.Column="1"
+                                       Text="开源声明"
+                                       FontSize="15"
+                                       FontWeight="SemiBold"
+                                       Foreground="#2B2F36"
+                                       VerticalAlignment="Center"
+                                       Margin="8,0,0,0" />
+                        </Grid>
+                    </Button>
+
+                    <Grid x:Name="LicenseBody" Height="0">
+                        <StackPanel Margin="18,2,18,16">
+                            <TextBlock Text=".NET 8" Style="{StaticResource BodyTitleStyle}" />
+                            <TextBlock Text="MIT License · Copyright (c) .NET Foundation and Contributors" Style="{StaticResource BodyItemStyle}" />
+
+                            <TextBlock Text="WPF" Style="{StaticResource BodyTitleStyle}" />
+                            <TextBlock Text=".NET 桌面开发框架的一部分，随 .NET 8 以 MIT License 授权" Style="{StaticResource BodyItemStyle}" />
+
+                            <TextBlock Text="其他" Style="{StaticResource BodyTitleStyle}" />
+                            <TextBlock Text="本项目当前零第三方 NuGet 依赖；后续引入的开源组件将在此处补充声明（占位）" Style="{StaticResource BodyItemStyle}" />
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
