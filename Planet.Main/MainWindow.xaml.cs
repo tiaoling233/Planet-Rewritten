@@ -57,7 +57,7 @@ public partial class MainWindow : Window
             1 => CreatePlaceholder("这是功能"),
             2 => new Views.MysteryView(),
             3 => new Views.InfoView(),
-            4 => CreatePlaceholder("这是设置"),
+            4 => new Views.SettingsView(),
             _ => CreatePlaceholder("未知页面"),
         };
     }
