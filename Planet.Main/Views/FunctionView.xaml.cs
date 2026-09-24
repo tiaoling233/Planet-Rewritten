@@ -15,6 +15,9 @@ public partial class FunctionView : UserControl
     /// <summary>标题排序比较器：不变文化升序，与系统区域设置无关，排序结果稳定可预期。</summary>
     private static readonly StringComparer TitleComparer = StringComparer.InvariantCulture;
 
+    /// <summary>已实现功能的卡片标题（摩斯密码编解码）。</summary>
+    private const string MorseCodeTitle = "摩斯密码编解码";
+
     public FunctionView()
     {
         InitializeComponent();
@@ -44,7 +47,7 @@ public partial class FunctionView : UserControl
             .ToList();
     }
 
-    /// <summary>卡片点击：弹出占位提示（插件卡片提示跳转插件市场）。</summary>
+    /// <summary>卡片点击：已实现的功能打开独立窗口，其余弹出占位提示。</summary>
     private void OnCardClick(object sender, RoutedEventArgs e)
     {
         if (sender is not Button { CommandParameter: FunctionCard card })
@@ -52,10 +55,40 @@ public partial class FunctionView : UserControl
             return;
         }
 
+        LogService.Info($"功能页点击卡片：{card.Title}（{(card.IsPlugin ? "插件" : "功能")}）");
+
+        // 已实现的功能：打开独立窗口（不破坏功能页的卡片网格布局）
+        if (card.Title == MorseCodeTitle)
+        {
+            OpenChildWindow(new MorseCodeWindow());
+            return;
+        }
+
+        ShowPlaceholderPopup(card);
+    }
+
+    /// <summary>以模态方式打开子窗口（带主窗口背景暗化）。</summary>
+    private void OpenChildWindow(Window window)
+    {
+        var mainWindow = Window.GetWindow(this) as MainWindow;
+        window.Owner = mainWindow;
+
+        mainWindow?.ShowDimOverlay(true);
+        try
+        {
+            window.ShowDialog();
+        }
+        finally
+        {
+            mainWindow?.ShowDimOverlay(false);
+        }
+    }
+
+    /// <summary>占位提示弹窗（插件卡片提示跳转插件市场）。</summary>
+    private void ShowPlaceholderPopup(FunctionCard card)
+    {
         var mainWindow = Window.GetWindow(this) as MainWindow;
         string message = card.IsPlugin ? "跳转到插件市场" : "功能待实现";
-
-        LogService.Info($"功能页点击卡片：{card.Title}（{(card.IsPlugin ? "插件" : "功能")}）");
 
         var popup = new PlanetPopupWindow
         {
