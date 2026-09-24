@@ -90,9 +90,13 @@
                                 AutomationProperties.Name="{Binding Title}"
                                 Click="OnCardClick">
                             <StackPanel>
-                                <TextBlock Text="{Binding Icon}"
-                                           FontSize="30"
-                                           HorizontalAlignment="Center" />
+                                <Viewbox Width="30"
+                                         Height="30"
+                                         HorizontalAlignment="Center">
+                                    <Path Data="{Binding IconData}"
+                                          Fill="#3E6F96"
+                                          Stretch="Uniform" />
+                                </Viewbox>
                                 <TextBlock Text="{Binding Title}"
                                            FontSize="15"
                                            FontWeight="SemiBold"

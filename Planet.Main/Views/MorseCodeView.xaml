@@ -51,7 +51,8 @@
                          AcceptsReturn="True"
                          TextWrapping="Wrap"
                          VerticalScrollBarVisibility="Auto"
-                         VerticalContentAlignment="Top" />
+                         VerticalContentAlignment="Top"
+                         AutomationProperties.Name="摩斯输入框" />
 
                 <!-- 中间：编码 / 解码 -->
                 <StackPanel Grid.Column="1"
@@ -75,7 +76,8 @@
                          IsReadOnly="True"
                          VerticalScrollBarVisibility="Auto"
                          VerticalContentAlignment="Top"
-                         Background="#F8F9FB" />
+                         Background="#F8F9FB"
+                         AutomationProperties.Name="摩斯结果框" />
             </Grid>
 
             <!-- 提示 / 状态行 -->

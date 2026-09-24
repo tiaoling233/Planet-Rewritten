@@ -9,11 +9,13 @@
              d:DesignWidth="400">
 
     <!-- 页面整体卡片：白底、圆角、浅灰描边（与摩斯密码/主页/设置页风格一致） -->
+    <ScrollViewer VerticalScrollBarVisibility="Auto"
+                  HorizontalScrollBarVisibility="Disabled">
     <Border Background="White"
             BorderBrush="#E3E6EA"
             BorderThickness="1"
             CornerRadius="12"
-            Padding="22,18">
+            Padding="18,14">
         <Border.Effect>
             <DropShadowEffect BlurRadius="20"
                               ShadowDepth="2"
@@ -24,6 +26,7 @@
 
         <Grid>
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
@@ -37,11 +40,11 @@
                        FontWeight="SemiBold"
                        Foreground="#2B2F36" />
 
-            <!-- 表达式 / 结果显示（只读，右对齐） -->
+            <!-- 当前表达式 / 结果显示（只读，右对齐） -->
             <TextBox x:Name="DisplayBox"
                      Grid.Row="1"
-                     Margin="0,14,0,0"
-                     MinHeight="52"
+                     Margin="0,10,0,0"
+                     MinHeight="60"
                      IsReadOnly="True"
                      IsReadOnlyCaretVisible="False"
                      FontSize="24"
@@ -50,58 +53,79 @@
                      Background="#F8F9FB"
                      AutomationProperties.Name="显示框" />
 
-            <!-- 按键网格：4 列 × 5 行，UniformGrid 保证等宽等高对齐 -->
-            <UniformGrid x:Name="Keypad"
-                         Grid.Row="2"
-                         Margin="0,14,0,0"
-                         Columns="4"
-                         Rows="5">
+            <!-- 历史表达式（位于显示框下方的小字） -->
+            <TextBlock x:Name="HistoryText"
+                       Grid.Row="2"
+                       Height="20"
+                       Margin="0,4,0,0"
+                       FontSize="12"
+                       Foreground="#9AA0A8"
+                       TextAlignment="Right"
+                       TextTrimming="CharacterEllipsis" />
 
-                <!-- 第 1 行：清空 / 退格 / 左右括号 -->
-                <Button Content="C" Height="44" Margin="4"
-                        AutomationProperties.Name="清空"
-                        Click="OnClearClick" />
-                <Button Content="⌫" Height="44" Margin="4"
-                        AutomationProperties.Name="退格"
-                        Click="OnBackspaceClick" />
-                <Button Content="(" Height="44" Margin="4" Tag="(" Click="OnKeyClick" />
-                <Button Content=")" Height="44" Margin="4" Tag=")" Click="OnKeyClick" />
+            <!-- 按键网格：4 列 × 7 行；全部按键最小 60×60，字号 18。 -->
+            <Grid x:Name="Keypad"
+                  Grid.Row="3"
+                  Margin="0,10,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
 
-                <!-- 第 2 行 -->
-                <Button Content="7" Height="44" Margin="4" Tag="7" Click="OnKeyClick" />
-                <Button Content="8" Height="44" Margin="4" Tag="8" Click="OnKeyClick" />
-                <Button Content="9" Height="44" Margin="4" Tag="9" Click="OnKeyClick" />
-                <Button Content="/" Height="44" Margin="4" Tag="/" Click="OnKeyClick" />
+                <Button Grid.Row="0" Grid.Column="0" Content="C" MinWidth="60" MinHeight="60" FontSize="18" Margin="3" AutomationProperties.Name="清空" Click="OnClearClick" />
+                <Button Grid.Row="0" Grid.Column="1" Content="⌫" MinWidth="60" MinHeight="60" FontSize="18" Margin="3" AutomationProperties.Name="退格" Click="OnBackspaceClick" />
+                <Button Grid.Row="0" Grid.Column="2" Content="(" MinWidth="60" MinHeight="60" FontSize="18" Margin="3" Tag="(" Click="OnKeyClick" />
+                <Button Grid.Row="0" Grid.Column="3" Content=")" MinWidth="60" MinHeight="60" FontSize="18" Margin="3" Tag=")" Click="OnKeyClick" />
 
-                <!-- 第 3 行 -->
-                <Button Content="4" Height="44" Margin="4" Tag="4" Click="OnKeyClick" />
-                <Button Content="5" Height="44" Margin="4" Tag="5" Click="OnKeyClick" />
-                <Button Content="6" Height="44" Margin="4" Tag="6" Click="OnKeyClick" />
-                <Button Content="*" Height="44" Margin="4" Tag="*" Click="OnKeyClick" />
+                <Button Grid.Row="1" Grid.Column="0" Content="%" MinWidth="60" MinHeight="60" FontSize="18" Margin="3" AutomationProperties.Name="百分号" Click="OnPercentClick" />
+                <Button Grid.Row="1" Grid.Column="1" Content="±" MinWidth="60" MinHeight="60" FontSize="18" Margin="3" AutomationProperties.Name="正负号" Click="OnToggleSignClick" />
+                <Button Grid.Row="1" Grid.Column="2" Content="1/x" MinWidth="60" MinHeight="60" FontSize="18" Margin="3" AutomationProperties.Name="倒数" Click="OnReciprocalClick" />
+                <Button Grid.Row="1" Grid.Column="3" Content="√" MinWidth="60" MinHeight="60" FontSize="18" Margin="3" AutomationProperties.Name="平方根" Click="OnSquareRootClick" />
 
-                <!-- 第 4 行 -->
-                <Button Content="1" Height="44" Margin="4" Tag="1" Click="OnKeyClick" />
-                <Button Content="2" Height="44" Margin="4" Tag="2" Click="OnKeyClick" />
-                <Button Content="3" Height="44" Margin="4" Tag="3" Click="OnKeyClick" />
-                <Button Content="-" Height="44" Margin="4" Tag="-" Click="OnKeyClick" />
+                <Button Grid.Row="2" Grid.Column="0" Content="x²" MinWidth="60" MinHeight="60" FontSize="18" Margin="3" AutomationProperties.Name="平方" Click="OnSquareClick" />
+                <Button Grid.Row="2" Grid.Column="1" Content="π" MinWidth="60" MinHeight="60" FontSize="18" Margin="3" Tag="π" Click="OnKeyClick" />
+                <Button Grid.Row="2" Grid.Column="2" Content="7" MinWidth="60" MinHeight="60" FontSize="18" Margin="3" Tag="7" Click="OnKeyClick" />
+                <Button Grid.Row="2" Grid.Column="3" Content="8" MinWidth="60" MinHeight="60" FontSize="18" Margin="3" Tag="8" Click="OnKeyClick" />
 
-                <!-- 第 5 行 -->
-                <Button Content="0" Height="44" Margin="4" Tag="0" Click="OnKeyClick" />
-                <Button Content="." Height="44" Margin="4" Tag="." Click="OnKeyClick" />
-                <Button Content="=" Height="44" Margin="4"
-                        AutomationProperties.Name="等于"
-                        Click="OnEqualsClick" />
-                <Button Content="+" Height="44" Margin="4" Tag="+" Click="OnKeyClick" />
-            </UniformGrid>
+                <Button Grid.Row="3" Grid.Column="0" Content="9" MinWidth="60" MinHeight="60" FontSize="18" Margin="3" Tag="9" Click="OnKeyClick" />
+                <Button Grid.Row="3" Grid.Column="1" Content="/" MinWidth="60" MinHeight="60" FontSize="18" Margin="3" Tag="/" Click="OnKeyClick" />
+                <Button Grid.Row="3" Grid.Column="2" Content="4" MinWidth="60" MinHeight="60" FontSize="18" Margin="3" Tag="4" Click="OnKeyClick" />
+                <Button Grid.Row="3" Grid.Column="3" Content="5" MinWidth="60" MinHeight="60" FontSize="18" Margin="3" Tag="5" Click="OnKeyClick" />
+
+                <Button Grid.Row="4" Grid.Column="0" Content="6" MinWidth="60" MinHeight="60" FontSize="18" Margin="3" Tag="6" Click="OnKeyClick" />
+                <Button Grid.Row="4" Grid.Column="1" Content="*" MinWidth="60" MinHeight="60" FontSize="18" Margin="3" Tag="*" Click="OnKeyClick" />
+                <Button Grid.Row="4" Grid.Column="2" Content="+" MinWidth="60" MinHeight="60" FontSize="18" Margin="3" Tag="+" Click="OnKeyClick" />
+                <Button Grid.Row="4" Grid.Column="3" Content="1" MinWidth="60" MinHeight="60" FontSize="18" Margin="3" Tag="1" Click="OnKeyClick" />
+
+                <Button Grid.Row="5" Grid.Column="0" Content="2" MinWidth="60" MinHeight="60" FontSize="18" Margin="3" Tag="2" Click="OnKeyClick" />
+                <Button Grid.Row="5" Grid.Column="1" Content="3" MinWidth="60" MinHeight="60" FontSize="18" Margin="3" Tag="3" Click="OnKeyClick" />
+                <Button Grid.Row="5" Grid.Column="2" Content="-" MinWidth="60" MinHeight="60" FontSize="18" Margin="3" Tag="-" Click="OnKeyClick" />
+                <Button Grid.Row="5" Grid.Column="3" Content="0" MinWidth="60" MinHeight="60" FontSize="18" Margin="3" Tag="0" Click="OnKeyClick" />
+
+                <Button Grid.Row="6" Grid.Column="0" Content="." MinWidth="60" MinHeight="60" FontSize="18" Margin="3" Tag="." Click="OnKeyClick" />
+                <Button Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="3" Content="=" MinWidth="60" MinHeight="60" FontSize="18" Margin="3" AutomationProperties.Name="等于" Click="OnEqualsClick" />
+            </Grid>
 
             <!-- 提示 / 状态行（除零、非法表达式等错误也在此提示） -->
-            <TextBlock Grid.Row="3"
+            <TextBlock Grid.Row="4"
                        x:Name="HintText"
                        FontSize="12"
                        Foreground="#9AA0A8"
                        Margin="0,12,0,0"
                        TextWrapping="Wrap"
-                       Text="提示：支持 + - * / 与括号；C 清空，⌫ 删除末位，= 求值。" />
+                       Text="提示：支持 + - * /、括号、%、±、1/x、√、x²、π；C 清空，⌫ 删除末位，= 求值。" />
         </Grid>
     </Border>
+    </ScrollViewer>
 </UserControl>
