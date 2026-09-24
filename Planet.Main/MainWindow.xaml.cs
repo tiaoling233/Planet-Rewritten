@@ -49,7 +49,7 @@ public partial class MainWindow : Window
         MainContent.Content = index switch
         {
             0 => new Views.HomeView(),
-            1 => CreatePlaceholder("这是功能"),
+            1 => new Views.FunctionView(),
             2 => new Views.MysteryView(),
             3 => new Views.InfoView(),
             4 => new Views.SettingsView(),
