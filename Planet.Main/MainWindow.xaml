@@ -14,7 +14,8 @@
         WindowStyle="None"
         AllowsTransparency="True"
         Background="Transparent"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen"
+        PreviewKeyDown="OnWindowPreviewKeyDown">
 
     <Window.Resources>
         <!-- 颜色占位：主题系统在后续阶段接入后统一替换 -->

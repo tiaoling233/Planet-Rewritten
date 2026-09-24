@@ -57,6 +57,78 @@ public partial class MainWindow : Window
         };
     }
 
+    /// <summary>
+    /// 窗口内标签页切换快捷键：A / ← 上一页，D / → 下一页（0↔4 循环）。
+    /// 输入控件聚焦时放行；Win 组合键不参与页面切换。
+    /// </summary>
+    private void OnWindowPreviewKeyDown(object sender, KeyEventArgs e)
+    {
+        // 防误触：文本框等输入控件聚焦时（如设置页“加速网站”输入框），字母键应正常输入字符
+        if (Keyboard.FocusedElement is TextBoxBase)
+        {
+            return;
+        }
+
+        // 中文输入法激活时字母键会以 Key.ImeProcessed 送达，真实按键保存在 ImeProcessedKey 中
+        Key key = e.Key == Key.ImeProcessed ? e.ImeProcessedKey : e.Key;
+
+        ModifierKeys modifiers = Keyboard.Modifiers;
+
+        // Win 组合键交给系统处理，不参与页面切换
+        if ((modifiers & ModifierKeys.Windows) == ModifierKeys.Windows)
+        {
+            if (key is Key.Left or Key.Right or Key.Up)
+            {
+                // Win+←/→/↑：标记已处理，阻止本窗口后续键盘路由将其识别为标签页切换。
+                // 说明：系统级窗口吸附由 shell 处理，需全局键盘钩子才能拦截；本项目按需求不引入全局钩子。
+                e.Handled = true;
+            }
+
+            return;
+        }
+
+        // 带 Ctrl / Alt 的组合键（如 Ctrl+A）交由系统或其他功能处理，避免被快捷键劫持
+        if ((modifiers & (ModifierKeys.Control | ModifierKeys.Alt)) != 0)
+        {
+            return;
+        }
+
+        int current = GetCurrentPageIndex();
+        int? target = key switch
+        {
+            Key.A or Key.Left => current - 1,
+            Key.D or Key.Right => current + 1,
+            _ => null,
+        };
+
+        if (target is null)
+        {
+            return;   // 未命中快捷键映射
+        }
+
+        // 循环切换：0 → 上一页为 4，4 → 下一页为 0
+        int index = ((target.Value % _navButtons.Length) + _navButtons.Length) % _navButtons.Length;
+
+        // 复用既有链路：IsChecked=true → Checked → OnNavButtonChecked → SwitchPage
+        _navButtons[index].IsChecked = true;
+        e.Handled = true;
+    }
+
+    /// <summary>读取当前选中标签页的索引（来自 RadioButton 的 Tag）；无选中项时回退到主页（0）。</summary>
+    private int GetCurrentPageIndex()
+    {
+        foreach (RadioButton button in _navButtons)
+        {
+            if (button.IsChecked == true
+                && int.TryParse(button.Tag?.ToString(), out int index))
+            {
+                return index;
+            }
+        }
+
+        return 0;
+    }
+
     private static TextBlock CreatePlaceholder(string text)
     {
         return new TextBlock
