@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using Planet.Main.Services;
@@ -12,11 +13,9 @@ namespace Planet.Main;
 /// </summary>
 public partial class MainWindow : Window
 {
-    private static readonly Brush _defaultNavBrush = Brushes.Transparent;
-    private static readonly Brush _selectedNavBrush = new SolidColorBrush(Color.FromRgb(0x3E, 0x6F, 0x96));
     private static readonly Brush _pageTextBrush = new SolidColorBrush(Color.FromRgb(0x44, 0x4A, 0x53));
 
-    private readonly Button[] _navButtons;
+    private readonly RadioButton[] _navButtons;
 
     public MainWindow()
     {
@@ -30,13 +29,15 @@ public partial class MainWindow : Window
     private void OnLoaded(object sender, RoutedEventArgs e)
     {
         LogService.Info("主窗口已加载");
-        SwitchPage(0);
+
+        // 默认选中“主页”（索引 0）：设置 IsChecked 会触发 Checked 事件 → SwitchPage(0)，同时完成初始高亮
+        _navButtons[0].IsChecked = true;
     }
 
-    private void OnNavButtonClick(object sender, RoutedEventArgs e)
+    private void OnNavButtonChecked(object sender, RoutedEventArgs e)
     {
-        if (sender is Button button
-            && int.TryParse(button.Tag?.ToString(), out int index))
+        if (sender is RadioButton { Tag: not null } radio
+            && int.TryParse(radio.Tag.ToString(), out int index))
         {
             SwitchPage(index);
         }
@@ -44,13 +45,7 @@ public partial class MainWindow : Window
 
     private void SwitchPage(int index)
     {
-        // 刷新左侧选中高亮
-        for (int i = 0; i < _navButtons.Length; i++)
-        {
-            _navButtons[i].Background = i == index ? _selectedNavBrush : _defaultNavBrush;
-        }
-
-        // 主页已接入独立 UserControl；其余页面暂用占位文本
+        // 选中高亮由 NavRadioStyle 模板依据 IsChecked 自动呈现（GroupName 保证互斥），此处只负责切换页面内容
         MainContent.Content = index switch
         {
             0 => new Views.HomeView(),
@@ -96,9 +91,9 @@ public partial class MainWindow : Window
 
     private void OnSidebar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-        // 点击在导航按钮上时不触发窗口拖动（按钮自行处理点击）。
+        // 点击在导航项或按钮上时不触发窗口拖动（控件自行处理点击）。
         if (e.OriginalSource is DependencyObject source
-            && FindAncestor<Button>(source) is not null)
+            && FindAncestor<ButtonBase>(source) is not null)
         {
             return;
         }
