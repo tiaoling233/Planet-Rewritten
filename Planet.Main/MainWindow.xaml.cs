@@ -45,6 +45,12 @@ public partial class MainWindow : Window
 
     private void SwitchPage(int index)
     {
+        // 离开功能页时恢复顶部标题，避免返回按钮跨页面残留。
+        if (index != 1)
+        {
+            SetNavigationMode(false);
+        }
+
         // 选中高亮由 NavRadioStyle 模板依据 IsChecked 自动呈现（GroupName 保证互斥），此处只负责切换页面内容
         MainContent.Content = index switch
         {
@@ -55,6 +61,32 @@ public partial class MainWindow : Window
             4 => new Views.SettingsView(),
             _ => CreatePlaceholder("未知页面"),
         };
+    }
+
+    /// <summary>
+    /// 切换左侧栏顶部状态：功能子页面显示“返回”，主页面显示“Planet”标题。
+    /// </summary>
+    public void SetNavigationMode(bool isInSubView)
+    {
+        PlanetTitle.Visibility = isInSubView ? Visibility.Collapsed : Visibility.Visible;
+        BackButton.Visibility = isInSubView ? Visibility.Visible : Visibility.Collapsed;
+    }
+
+    /// <summary>返回功能卡片网格；当前不在功能页时仅恢复默认导航栏。</summary>
+    public void GoBack()
+    {
+        if (MainContent.Content is Views.FunctionView functionView)
+        {
+            functionView.GoBackToGrid();
+            return;
+        }
+
+        SetNavigationMode(false);
+    }
+
+    private void OnBackButtonClick(object sender, RoutedEventArgs e)
+    {
+        GoBack();
     }
 
     /// <summary>

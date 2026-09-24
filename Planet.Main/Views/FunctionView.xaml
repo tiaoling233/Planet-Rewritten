@@ -57,10 +57,12 @@
         </Style>
     </UserControl.Resources>
 
-    <!-- 功能页：功能卡片网格（WrapPanel 一行放不下自动换行；滚动条沿用 HC 全局悬浮样式） -->
-    <ScrollViewer VerticalScrollBarVisibility="Auto"
-                  HorizontalScrollBarVisibility="Disabled">
-        <StackPanel Margin="28,24,28,24">
+    <!-- 功能页：默认显示卡片网格；点击已实现功能后在同一内容区显示子视图。 -->
+    <Grid>
+        <ScrollViewer x:Name="GridView"
+                      VerticalScrollBarVisibility="Auto"
+                      HorizontalScrollBarVisibility="Disabled">
+            <StackPanel Margin="28,24,28,24">
 
             <TextBlock Text="功能"
                        FontSize="28"
@@ -110,5 +112,12 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </StackPanel>
-    </ScrollViewer>
+        </ScrollViewer>
+
+        <!-- 已实现功能以内联视图显示；默认隐藏，点击功能卡片后切换为可见。 -->
+        <ContentControl x:Name="FunctionHost"
+                        HorizontalContentAlignment="Stretch"
+                        VerticalContentAlignment="Stretch"
+                        Visibility="Collapsed" />
+    </Grid>
 </UserControl>

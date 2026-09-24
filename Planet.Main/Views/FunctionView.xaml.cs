@@ -15,6 +15,9 @@ public partial class FunctionView : UserControl
     /// <summary>标题排序比较器：不变文化升序，与系统区域设置无关，排序结果稳定可预期。</summary>
     private static readonly StringComparer TitleComparer = StringComparer.InvariantCulture;
 
+    /// <summary>当前是否显示功能卡片网格（false 表示正在显示内联功能视图）。</summary>
+    private bool _isShowingGrid = true;
+
     /// <summary>已实现功能的卡片标题（摩斯密码编解码）。</summary>
     private const string MorseCodeTitle = "摩斯密码编解码";
 
@@ -50,7 +53,7 @@ public partial class FunctionView : UserControl
             .ToList();
     }
 
-    /// <summary>卡片点击：已实现的功能打开独立窗口，其余弹出占位提示。</summary>
+    /// <summary>卡片点击：已实现的功能以内联视图显示，其余弹出占位提示。</summary>
     private void OnCardClick(object sender, RoutedEventArgs e)
     {
         if (sender is not Button { CommandParameter: FunctionCard card })
@@ -60,37 +63,54 @@ public partial class FunctionView : UserControl
 
         LogService.Info($"功能页点击卡片：{card.Title}（{(card.IsPlugin ? "插件" : "功能")}）");
 
-        // 已实现的功能：打开独立窗口（不破坏功能页的卡片网格布局）
         if (card.Title == MorseCodeTitle)
         {
-            OpenChildWindow(new MorseCodeWindow());
+            ShowFunctionView(new MorseCodeView());
             return;
         }
 
         if (card.Title == CalculatorTitle)
         {
-            OpenChildWindow(new CalculatorWindow());
+            ShowFunctionView(new CalculatorView());
             return;
         }
 
         ShowPlaceholderPopup(card);
     }
 
-    /// <summary>以模态方式打开子窗口（带主窗口背景暗化）。</summary>
-    private void OpenChildWindow(Window window)
+    /// <summary>在主内容区内显示功能子视图，并切换左侧栏为“返回”状态。</summary>
+    private void ShowFunctionView(UserControl view)
     {
-        var mainWindow = Window.GetWindow(this) as MainWindow;
-        window.Owner = mainWindow;
+        _isShowingGrid = false;
+        FunctionHost.Content = view;
+        FunctionHost.Visibility = Visibility.Visible;
+        GridView.Visibility = Visibility.Collapsed;
 
-        mainWindow?.ShowDimOverlay(true);
-        try
+        if (Window.GetWindow(this) is MainWindow mainWindow)
         {
-            window.ShowDialog();
+            mainWindow.SetNavigationMode(true);
         }
-        finally
+    }
+
+    /// <summary>返回功能卡片网格，并恢复左侧栏的 Planet 标题。</summary>
+    public void GoBackToGrid()
+    {
+        if (!_isShowingGrid)
         {
-            mainWindow?.ShowDimOverlay(false);
+            return;
         }
+
+        _isShowingGrid = true;
+        FunctionHost.Content = null;
+        FunctionHost.Visibility = Visibility.Collapsed;
+        GridView.Visibility = Visibility.Visible;
+
+        if (Window.GetWindow(this) is MainWindow mainWindow)
+        {
+            mainWindow.SetNavigationMode(false);
+        }
+
+        LogService.Info("功能页已返回卡片网格");
     }
 
     /// <summary>占位提示弹窗（插件卡片提示跳转插件市场）。</summary>
