@@ -13,22 +13,17 @@
         MinWidth="640"
         WindowStyle="None"
         AllowsTransparency="True"
-        Background="Transparent"
+        Background="{DynamicResource ThemeBackgroundBrush}"
         WindowStartupLocation="CenterScreen"
         PreviewKeyDown="OnWindowPreviewKeyDown">
 
     <Window.Resources>
-        <!-- 导航栏固定色与全局主题强调色 -->
-        <SolidColorBrush x:Key="SidebarBrush" Color="#23272F" />
-        <SolidColorBrush x:Key="SidebarHoverBrush" Color="#303642" />
-        <SolidColorBrush x:Key="SidebarPressedBrush" Color="#3A4250" />
-        <SolidColorBrush x:Key="SidebarTextBrush" Color="#C7CDD6" />
-        <SolidColorBrush x:Key="ContentBrush" Color="#F5F6F8" />
+        <!-- 窗口内部固定前景资源；背景与强调色统一由 App 级主题资源提供。 -->
         <SolidColorBrush x:Key="PageTextBrush" Color="#444A53" />
 
-        <!-- 左侧导航按钮：圆角 + 鼠标悬浮/按下变色 -->
+        <!-- 左侧辅助按钮（返回 / 隐藏 / 退出）：未选中态白字，悬浮使用统一灰色滤镜。 -->
         <Style x:Key="NavButtonStyle" TargetType="Button">
-            <Setter Property="Foreground" Value="{StaticResource SidebarTextBrush}" />
+            <Setter Property="Foreground" Value="White" />
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="BorderThickness" Value="0" />
             <Setter Property="Height" Value="40" />
@@ -43,21 +38,29 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border x:Name="Bg"
-                                Background="{TemplateBinding Background}"
-                                CornerRadius="8"
-                                SnapsToDevicePixels="True">
-                            <ContentPresenter Margin="{TemplateBinding Padding}"
-                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
-                        </Border>
+                        <Grid>
+                            <Border x:Name="Bg"
+                                    Background="{TemplateBinding Background}"
+                                    CornerRadius="8"
+                                    SnapsToDevicePixels="True">
+                                <ContentPresenter Margin="{TemplateBinding Padding}"
+                                                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                            </Border>
+                            <Border x:Name="HoverOverlay"
+                                    Background="Gray"
+                                    Opacity="0.15"
+                                    CornerRadius="8"
+                                    IsHitTestVisible="False"
+                                    Visibility="Collapsed" />
+                        </Grid>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Bg" Property="Background" Value="{StaticResource SidebarHoverBrush}" />
-                                <Setter Property="Foreground" Value="#FFFFFF" />
+                                <Setter TargetName="HoverOverlay" Property="Visibility" Value="Visible" />
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="Bg" Property="Background" Value="{StaticResource SidebarPressedBrush}" />
+                                <Setter TargetName="HoverOverlay" Property="Visibility" Value="Visible" />
+                                <Setter TargetName="HoverOverlay" Property="Opacity" Value="0.25" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -65,10 +68,9 @@
             </Setter>
         </Style>
 
-        <!-- 导航项专用样式（RadioButton）：互斥选中由 GroupName 提供，视觉完全由本模板控制。
-             使用自定义模板而非 HC 的 ToggleButton 样式，避免整行导航项出现错位/多余边框/图标缩放问题。 -->
+        <!-- 导航项专用样式：未选中白字，选中白底主题字；悬浮统一使用灰色滤镜。 -->
         <Style x:Key="NavRadioStyle" TargetType="RadioButton">
-            <Setter Property="Foreground" Value="{StaticResource SidebarTextBrush}" />
+            <Setter Property="Foreground" Value="White" />
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="BorderThickness" Value="0" />
             <Setter Property="Height" Value="40" />
@@ -81,23 +83,33 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="RadioButton">
-                        <Border x:Name="Bg"
-                                Background="{TemplateBinding Background}"
-                                CornerRadius="8"
-                                Padding="{TemplateBinding Padding}"
-                                SnapsToDevicePixels="True">
-                            <ContentPresenter HorizontalAlignment="Stretch"
-                                              VerticalAlignment="Center" />
-                        </Border>
+                        <Grid>
+                            <Border x:Name="Bg"
+                                    Background="{TemplateBinding Background}"
+                                    CornerRadius="8"
+                                    Padding="{TemplateBinding Padding}"
+                                    SnapsToDevicePixels="True">
+                                <ContentPresenter HorizontalAlignment="Stretch"
+                                                  VerticalAlignment="Center" />
+                            </Border>
+                            <Border x:Name="HoverOverlay"
+                                    Background="Gray"
+                                    Opacity="0.15"
+                                    CornerRadius="8"
+                                    IsHitTestVisible="False"
+                                    Visibility="Collapsed" />
+                        </Grid>
                         <ControlTemplate.Triggers>
-                            <!-- 触发器顺序：IsChecked 置于 IsMouseOver 之后，选中项悬浮时仍保持选中色 -->
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Bg" Property="Background" Value="{StaticResource SidebarHoverBrush}" />
-                                <Setter Property="Foreground" Value="#FFFFFF" />
+                                <Setter TargetName="HoverOverlay" Property="Visibility" Value="Visible" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="HoverOverlay" Property="Visibility" Value="Visible" />
+                                <Setter TargetName="HoverOverlay" Property="Opacity" Value="0.25" />
                             </Trigger>
                             <Trigger Property="IsChecked" Value="True">
-                                <Setter TargetName="Bg" Property="Background" Value="{DynamicResource ThemeBaseBrush}" />
-                                <Setter Property="Foreground" Value="#FFFFFF" />
+                                <Setter TargetName="Bg" Property="Background" Value="White" />
+                                <Setter Property="Foreground" Value="{DynamicResource ThemeBackgroundBrush}" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -108,7 +120,7 @@
         <!-- ===== SVG 图标（源：ref/svgicon0.txt，viewBox 0 0 1024 1024；Fill 绑定宿主前景色以跟随主题/hover）===== -->
         <!-- Planet 图标：仅用于顶部标题（StackPanel 无 Foreground 属性，故直接取标题文字同色） -->
         <Viewbox x:Key="IconPlanet" Width="20" Height="20" Stretch="Uniform">
-            <Path Fill="#9AA3AF"
+            <Path Fill="White"
                   Data="M512 861.090909c192.791273 0 349.090909-156.299636 349.090909-349.090909 0-192.791273-156.299636-349.090909-349.090909-349.090909-192.791273 0-349.090909 156.299636-349.090909 349.090909 0 192.791273 156.299636 349.090909 349.090909 349.090909z m0 69.818182c-231.354182 0-418.909091-187.554909-418.909091-418.909091S280.645818 93.090909 512 93.090909s418.909091 187.554909 418.909091 418.909091-187.554909 418.909091-418.909091 418.909091z M131.304727 679.098182l61.393455 33.28c-35.746909 66.001455-44.055273 110.848-34.420364 120.482909 10.612364 10.612364 61.137455-0.302545 133.864727-41.844364 82.944-47.406545 182.295273-126.208 277.550546-221.463272s174.056727-194.606545 221.463273-277.550546c41.541818-72.727273 52.456727-123.229091 41.844363-133.841454-9.751273-9.751273-55.156364-1.186909-121.832727 35.118545L677.794909 131.956364c92.439273-50.338909 163.933091-63.813818 204.567273-23.179637 76.683636 76.683636-47.965091 294.818909-263.307637 510.138182-215.319273 215.342545-433.454545 339.991273-510.138181 263.307636-40.448-40.424727-27.275636-111.383273 22.388363-203.10109z" />
         </Viewbox>
         <Viewbox x:Key="IconHome" Width="20" Height="20" Stretch="Uniform">
@@ -149,7 +161,7 @@
 
         <!-- ============ 左侧标签栏（固定 200px） ============ -->
         <Grid Grid.Column="0"
-              Background="{StaticResource SidebarBrush}"
+              Background="{DynamicResource ThemeBackgroundBrush}"
               MouseLeftButtonDown="OnSidebar_MouseLeftButtonDown">
             <Grid.RowDefinitions>
                 <RowDefinition Height="48" />
@@ -168,7 +180,7 @@
                     <TextBlock Text="Planet"
                                Margin="8,0,0,0"
                                VerticalAlignment="Center"
-                               Foreground="#9AA3AF"
+                               Foreground="White"
                                FontSize="13"
                                FontWeight="SemiBold" />
                 </StackPanel>
@@ -278,7 +290,7 @@
         </Grid>
 
         <!-- ============ 右侧主内容区（占满剩余空间） ============ -->
-        <Grid Grid.Column="1" Background="{StaticResource ContentBrush}">
+        <Grid Grid.Column="1" Background="{DynamicResource ThemeBackgroundBrush}">
             <ContentControl x:Name="MainContent"
                             HorizontalContentAlignment="Stretch"
                             VerticalContentAlignment="Stretch" />

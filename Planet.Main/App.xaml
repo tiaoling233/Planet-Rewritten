@@ -11,8 +11,9 @@
                 <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/Theme.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
-            <!-- 全局主题资源：运行时由 ThemeService 更新；所有页面统一使用 DynamicResource 引用。 -->
+            <!-- 全局主题资源：ThemeBaseBrush 用于强调，ThemeBackgroundBrush 用于主背景。 -->
             <SolidColorBrush x:Key="ThemeBaseBrush" Color="#3E6F96" />
+            <SolidColorBrush x:Key="ThemeBackgroundBrush" Color="#3E6F96" />
             <Color x:Key="ThemeGlowColor">#3E6F96</Color>
             <SolidColorBrush x:Key="ThemeHoverBrush" Color="#1F3E6F96" />
             <SolidColorBrush x:Key="ThemePressedBrush" Color="#383E6F96" />
@@ -30,7 +31,7 @@
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="Button">
-                            <!-- 悬浮/按下采用半透明黑色叠加层：任意底色（蓝/红/自定义）都会自然变深 -->
+                            <!-- 通用灰色悬浮滤镜：覆盖在内容上方，兼容任意主题底色。 -->
                             <Border Background="{TemplateBinding Background}"
                                     CornerRadius="6"
                                     SnapsToDevicePixels="True">
@@ -38,19 +39,22 @@
                                     <ContentPresenter HorizontalAlignment="Center"
                                                       VerticalAlignment="Center"
                                                       Margin="{TemplateBinding Padding}" />
-                                    <!-- 叠加层：默认透明，悬浮/按下时变为半透明黑 -->
+                                    <!-- 通用灰色悬浮滤镜：默认折叠，悬浮时覆盖在内容上方。 -->
                                     <Border x:Name="HoverOverlay"
-                                            Background="Transparent"
+                                            Background="Gray"
+                                            Opacity="0.15"
                                             CornerRadius="6"
-                                            IsHitTestVisible="False" />
+                                            IsHitTestVisible="False"
+                                            Visibility="Collapsed" />
                                 </Grid>
                             </Border>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter TargetName="HoverOverlay" Property="Background" Value="#26000000" />
+                                    <Setter TargetName="HoverOverlay" Property="Visibility" Value="Visible" />
                                 </Trigger>
                                 <Trigger Property="IsPressed" Value="True">
-                                    <Setter TargetName="HoverOverlay" Property="Background" Value="#40000000" />
+                                    <Setter TargetName="HoverOverlay" Property="Visibility" Value="Visible" />
+                                    <Setter TargetName="HoverOverlay" Property="Opacity" Value="0.25" />
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>

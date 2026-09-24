@@ -8,12 +8,12 @@ namespace Planet.Main.Services;
 
 /// <summary>一个全局主题的基础视觉定义。</summary>
 /// <param name="Name">主题名称。</param>
-/// <param name="BaseBrush">用于导航选中态、强调图标、按钮等区域的基础画刷。</param>
+/// <param name="BaseBrush">主题纯色；同时用于强调控件和主背景。</param>
 public sealed record Theme(string Name, Brush BaseBrush);
 
 /// <summary>
 /// 全局主题服务：集中维护主题，并在运行时更新 Application 级动态资源。
-/// 主题只覆盖强调色，不会把整套页面强行反色；因此现有浅色内容区保持可读性。
+/// ThemeBaseBrush 用于强调控件，ThemeBackgroundBrush 用于侧栏和主内容区背景。
 /// </summary>
 public static class ThemeService
 {
@@ -56,6 +56,7 @@ public static class ThemeService
 
         ResourceDictionary resources = Application.Current.Resources;
         resources["ThemeBaseBrush"] = theme.BaseBrush;
+        resources["ThemeBackgroundBrush"] = theme.BaseBrush;
         resources["ThemeGlowColor"] = baseColor;
         resources["ThemeHoverBrush"] = CreateBrush(Color.FromArgb(0x1F, baseColor.R, baseColor.G, baseColor.B));
         resources["ThemePressedBrush"] = CreateBrush(Color.FromArgb(0x38, baseColor.R, baseColor.G, baseColor.B));
