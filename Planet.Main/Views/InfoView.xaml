@@ -28,10 +28,10 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Bg" Property="Background" Value="#F6F8FA" />
+                                <Setter TargetName="Bg" Property="Background" Value="{DynamicResource ThemeHoverBrush}" />
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="Bg" Property="Background" Value="#EEF1F4" />
+                                <Setter TargetName="Bg" Property="Background" Value="{DynamicResource ThemePressedBrush}" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -122,6 +122,7 @@
                 <StackPanel>
                     <Button x:Name="CreditsHeader"
                             Style="{StaticResource CardHeaderStyle}"
+                            AutomationProperties.Name="致谢名单"
                             Click="OnCreditsHeaderClick">
                         <Grid Margin="18,14">
                             <Grid.ColumnDefinitions>
@@ -133,7 +134,7 @@
                             <Path Grid.Column="0"
                                   Width="20" Height="20"
                                   Data="M 9,5 L 15,11 L 9,17"
-                                  Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
+                                  Stroke="{DynamicResource ThemeBaseBrush}"
                                   StrokeThickness="2"
                                   StrokeStartLineCap="Round"
                                   StrokeEndLineCap="Round"
@@ -178,6 +179,7 @@
                 <StackPanel>
                     <Button x:Name="LicenseHeader"
                             Style="{StaticResource CardHeaderStyle}"
+                            AutomationProperties.Name="开源声明"
                             Click="OnLicenseHeaderClick">
                         <Grid Margin="18,14">
                             <Grid.ColumnDefinitions>
@@ -188,7 +190,7 @@
                             <Path Grid.Column="0"
                                   Width="20" Height="20"
                                   Data="M 9,5 L 15,11 L 9,17"
-                                  Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
+                                  Stroke="{DynamicResource ThemeBaseBrush}"
                                   StrokeThickness="2"
                                   StrokeStartLineCap="Round"
                                   StrokeEndLineCap="Round"

@@ -29,7 +29,16 @@ public partial class App : Application
         // 4. 加载设置文件（Data\settings.txt）。
         SettingsService.Load(AppPaths.SettingsFile);
 
-        // 5. 记录本次启动的基本信息。
+        // 5. 恢复上次使用的主题；未知主题名称会安全回退到“默认”。
+        string requestedTheme = SettingsService.ThemeName;
+        bool themeRestored = ThemeService.ApplyTheme(requestedTheme);
+        if (!themeRestored)
+        {
+            LogService.Warn($"未知主题“{requestedTheme}”，已回退到“{ThemeService.CurrentThemeName}”");
+            SettingsService.ThemeName = ThemeService.CurrentThemeName;
+        }
+
+        // 6. 记录本次启动的基本信息。
         LogService.Info($"Planet {GetVersionText()} 启动");
         LogService.Info($"操作系统：{Environment.OSVersion}");
         LogService.Info($"运行时：{Environment.Version}");

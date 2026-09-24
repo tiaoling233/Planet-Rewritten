@@ -29,7 +29,7 @@
             <TextBlock x:Name="ClockText"
                        FontSize="52"
                        FontWeight="Bold"
-                       Foreground="#3E6F96"
+                       Foreground="{DynamicResource ThemeBaseBrush}"
                        HorizontalAlignment="Center" />
 
             <TextBlock x:Name="IntroText"

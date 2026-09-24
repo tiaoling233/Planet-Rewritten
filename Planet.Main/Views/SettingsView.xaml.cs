@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using System;
+using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
 using Planet.Main.Services;
 
@@ -6,7 +8,7 @@ namespace Planet.Main.Views;
 
 /// <summary>
 /// 设置页：主题设置、下载源、标签页选择器视效。
-/// 当前为 UI 骨架，所有交互仅记录日志，不实际修改布局或主题。
+/// 主题选择会立即应用并持久化；其余选项当前仍只记录日志。
 /// </summary>
 public partial class SettingsView : UserControl
 {
@@ -18,11 +20,19 @@ public partial class SettingsView : UserControl
 
     private void OnLoaded(object sender, RoutedEventArgs e)
     {
-        // 初始化主题选中提示
-        CurrentThemeText.Text = "当前选中：默认";
+        // App 启动时已应用持久化主题；这里只同步按钮选中状态和页面提示。
+        RadioButton? selectedTheme = ThemeWrapPanel.Children
+            .OfType<RadioButton>()
+            .FirstOrDefault(button => string.Equals(
+                button.Content?.ToString(),
+                ThemeService.CurrentThemeName,
+                StringComparison.Ordinal));
+        (selectedTheme ??= ThemeWrapPanel.Children.OfType<RadioButton>().First()).IsChecked = true;
+        CurrentThemeText.Text = $"当前选中：{ThemeService.CurrentThemeName}";
+
         SettingsHintText.Text = "加速网站前缀将用于 Github 资源下载，如 ghproxy.dev/";
         VisualHintText.Text = "提示：标签页选择器可独立于主窗口，支持合并/独立模式，位置可设为上/下/左/右。";
-        LogService.Info("设置页已加载");
+        LogService.Info($"设置页已加载，当前主题：{ThemeService.CurrentThemeName}");
     }
 
     /// <summary>主题项选中：更新提示与日志（互斥与高亮由 GroupName + ThemeRadioStyle 模板负责）。</summary>
@@ -33,15 +43,22 @@ public partial class SettingsView : UserControl
             return;
         }
 
-        // XAML 中 IsChecked="True" 可能在 InitializeComponent 期间触发，此时提示控件尚未创建
+        // OnLoaded 会依据 ThemeService.CurrentThemeName 设置选中项；控件完整时正常应用并记录。
         if (CurrentThemeText is null)
         {
             return;
         }
 
-        string themeName = radio.Content?.ToString() ?? "未知";
-        CurrentThemeText.Text = $"当前选中：{themeName}";
-        LogService.Info($"切换主题：{themeName}");
+        string themeName = radio.Content?.ToString() ?? ThemeService.DefaultThemeName;
+        if (!ThemeService.ApplyTheme(themeName))
+        {
+            LogService.Warn($"未知主题“{themeName}”，已回退到“{ThemeService.CurrentThemeName}”");
+        }
+
+        string appliedTheme = ThemeService.CurrentThemeName;
+        SettingsService.ThemeName = appliedTheme;
+        CurrentThemeText.Text = $"当前选中：{appliedTheme}";
+        LogService.Info($"切换主题：{appliedTheme}");
     }
 
     /// <summary>下载源变更：记录日志。</summary>

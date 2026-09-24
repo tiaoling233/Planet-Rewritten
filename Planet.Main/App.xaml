@@ -11,11 +11,17 @@
                 <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/Theme.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
+            <!-- 全局主题资源：运行时由 ThemeService 更新；所有页面统一使用 DynamicResource 引用。 -->
+            <SolidColorBrush x:Key="ThemeBaseBrush" Color="#3E6F96" />
+            <Color x:Key="ThemeGlowColor">#3E6F96</Color>
+            <SolidColorBrush x:Key="ThemeHoverBrush" Color="#1F3E6F96" />
+            <SolidColorBrush x:Key="ThemePressedBrush" Color="#383E6F96" />
+
             <!-- 全局圆角按钮样式：弹窗、??? 页等功能按钮统一使用 -->
             <Style x:Key="RoundedButtonStyle" TargetType="Button">
                 <Setter Property="Height" Value="32" />
                 <Setter Property="Padding" Value="22,0" />
-                <Setter Property="Background" Value="#3E6F96" />
+                <Setter Property="Background" Value="{DynamicResource ThemeBaseBrush}" />
                 <Setter Property="Foreground" Value="White" />
                 <Setter Property="BorderThickness" Value="0" />
                 <Setter Property="FontSize" Value="13" />

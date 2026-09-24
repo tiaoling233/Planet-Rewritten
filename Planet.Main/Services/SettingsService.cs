@@ -29,6 +29,27 @@ public static class SettingsService
     /// <summary>是否已成功加载设置文件（无论文件原本是否存在）。</summary>
     public static bool IsLoaded { get; private set; }
 
+    private const string ThemeNameKey = "ThemeName";
+
+    /// <summary>
+    /// 当前主题名称。读取时默认返回“默认”，赋值时立即写入 settings.txt。
+    /// </summary>
+    public static string ThemeName
+    {
+        get => Get(ThemeNameKey, ThemeService.DefaultThemeName) ?? ThemeService.DefaultThemeName;
+        set
+        {
+            string normalized = string.IsNullOrWhiteSpace(value)
+                ? ThemeService.DefaultThemeName
+                : value.Trim();
+
+            if (!string.Equals(ThemeName, normalized, StringComparison.Ordinal))
+            {
+                Set(ThemeNameKey, normalized);
+            }
+        }
+    }
+
     /// <summary>
     /// 从指定文件加载设置。若文件不存在则视为空设置（不报错），
     /// 后续首次 Set 时会自动创建文件。

@@ -18,12 +18,11 @@
         PreviewKeyDown="OnWindowPreviewKeyDown">
 
     <Window.Resources>
-        <!-- 颜色占位：主题系统在后续阶段接入后统一替换 -->
+        <!-- 导航栏固定色与全局主题强调色 -->
         <SolidColorBrush x:Key="SidebarBrush" Color="#23272F" />
         <SolidColorBrush x:Key="SidebarHoverBrush" Color="#303642" />
         <SolidColorBrush x:Key="SidebarPressedBrush" Color="#3A4250" />
         <SolidColorBrush x:Key="SidebarTextBrush" Color="#C7CDD6" />
-        <SolidColorBrush x:Key="SidebarSelectedBrush" Color="#3E6F96" />
         <SolidColorBrush x:Key="ContentBrush" Color="#F5F6F8" />
         <SolidColorBrush x:Key="PageTextBrush" Color="#444A53" />
 
@@ -97,7 +96,7 @@
                                 <Setter Property="Foreground" Value="#FFFFFF" />
                             </Trigger>
                             <Trigger Property="IsChecked" Value="True">
-                                <Setter TargetName="Bg" Property="Background" Value="{StaticResource SidebarSelectedBrush}" />
+                                <Setter TargetName="Bg" Property="Background" Value="{DynamicResource ThemeBaseBrush}" />
                                 <Setter Property="Foreground" Value="#FFFFFF" />
                             </Trigger>
                         </ControlTemplate.Triggers>

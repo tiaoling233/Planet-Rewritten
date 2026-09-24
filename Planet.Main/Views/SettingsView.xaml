@@ -34,8 +34,8 @@
             <Setter Property="VerticalAlignment" Value="Center" />
         </Style>
 
-        <!-- 主题项专用样式（RadioButton）：圆角 8，悬浮浅灰，选中主题蓝；放入 WrapPanel 自动换行。
-             互斥选中由 GroupName="ThemeGroup" 提供，选中态由 IsChecked 触发器呈现。 -->
+        <!-- 主题项专用样式（RadioButton）：圆角 8，悬浮使用主题色浅透明背景，选中使用主题基础色；
+             动态资源让模板创建后仍能随 ThemeService 的切换实时更新。 -->
         <Style x:Key="ThemeRadioStyle" TargetType="RadioButton">
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="Foreground" Value="#444A53" />
@@ -61,11 +61,11 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Bg" Property="Background" Value="#F0F2F5" />
+                                <Setter TargetName="Bg" Property="Background" Value="{DynamicResource ThemeHoverBrush}" />
                             </Trigger>
                             <Trigger Property="IsChecked" Value="True">
-                                <Setter TargetName="Bg" Property="Background" Value="#3E6F96" />
-                                <Setter TargetName="Bg" Property="BorderBrush" Value="#3E6F96" />
+                                <Setter TargetName="Bg" Property="Background" Value="{DynamicResource ThemeBaseBrush}" />
+                                <Setter TargetName="Bg" Property="BorderBrush" Value="{DynamicResource ThemeBaseBrush}" />
                                 <Setter Property="Foreground" Value="White" />
                             </Trigger>
                         </ControlTemplate.Triggers>
@@ -76,7 +76,7 @@
 
         <!-- 检查更新按钮：蓝色圆角，高度 36 与输入框对齐 -->
         <Style x:Key="SettingsButtonStyle" TargetType="Button">
-            <Setter Property="Background" Value="#3E6F96" />
+            <Setter Property="Background" Value="{DynamicResource ThemeBaseBrush}" />
             <Setter Property="Foreground" Value="White" />
             <Setter Property="BorderThickness" Value="0" />
             <Setter Property="Padding" Value="16,0" />
@@ -97,10 +97,10 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Bg" Property="Background" Value="#356082" />
+                                <Setter TargetName="Bg" Property="Background" Value="{DynamicResource ThemeHoverBrush}" />
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="Bg" Property="Background" Value="#2C4F6D" />
+                                <Setter TargetName="Bg" Property="Background" Value="{DynamicResource ThemePressedBrush}" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -137,7 +137,7 @@
                                 <Setter TargetName="Bg" Property="BorderBrush" Value="#9CA3AF" />
                             </Trigger>
                             <Trigger Property="IsFocused" Value="True">
-                                <Setter TargetName="Bg" Property="BorderBrush" Value="#3E6F96" />
+                                <Setter TargetName="Bg" Property="BorderBrush" Value="{DynamicResource ThemeBaseBrush}" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -221,7 +221,7 @@
                                 <Setter TargetName="Bg" Property="BorderBrush" Value="#9CA3AF" />
                             </Trigger>
                             <Trigger Property="IsDropDownOpen" Value="True">
-                                <Setter TargetName="Bg" Property="BorderBrush" Value="#3E6F96" />
+                                <Setter TargetName="Bg" Property="BorderBrush" Value="{DynamicResource ThemeBaseBrush}" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -248,7 +248,7 @@
 
                     <!-- WrapPanel：主题名一行放不下自动换行 -->
                     <WrapPanel x:Name="ThemeWrapPanel">
-                        <RadioButton Content="默认"   GroupName="ThemeGroup" IsChecked="True"
+                        <RadioButton Content="默认"   GroupName="ThemeGroup"
                                      Style="{StaticResource ThemeRadioStyle}" Checked="OnThemeButtonChecked" />
                         <RadioButton Content="玄素黑" GroupName="ThemeGroup"
                                      Style="{StaticResource ThemeRadioStyle}" Checked="OnThemeButtonChecked" />
@@ -266,7 +266,7 @@
                                      Style="{StaticResource ThemeRadioStyle}" Checked="OnThemeButtonChecked" />
                     </WrapPanel>
 
-                    <!-- 当前选中的主题（仅显示，不实际切换） -->
+                    <!-- 当前选中的主题 -->
                     <TextBlock x:Name="CurrentThemeText"
                                FontSize="12"
                                Foreground="#9AA0A8"

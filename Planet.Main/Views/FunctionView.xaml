@@ -34,7 +34,7 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="CardBorder" Property="BorderBrush" Value="#3E6F96" />
+                                <Setter TargetName="CardBorder" Property="BorderBrush" Value="{DynamicResource ThemeBaseBrush}" />
                                 <!-- 轻微上浮：直接替换 Border 的 RenderTransform（模板内命名的 Freezable 不能作为触发器目标） -->
                                 <Setter TargetName="CardBorder" Property="RenderTransform">
                                     <Setter.Value>
@@ -43,7 +43,7 @@
                                 </Setter>
                                 <Setter TargetName="CardBorder" Property="Effect">
                                     <Setter.Value>
-                                        <DropShadowEffect Color="#3E6F96"
+                                        <DropShadowEffect Color="{DynamicResource ThemeGlowColor}"
                                                           BlurRadius="18"
                                                           ShadowDepth="0"
                                                           Opacity="0.45" />
@@ -94,7 +94,7 @@
                                          Height="30"
                                          HorizontalAlignment="Center">
                                     <Path Data="{Binding IconData}"
-                                          Fill="#3E6F96"
+                                          Fill="{DynamicResource ThemeBaseBrush}"
                                           Stretch="Uniform" />
                                 </Viewbox>
                                 <TextBlock Text="{Binding Title}"
