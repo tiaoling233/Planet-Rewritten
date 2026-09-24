@@ -60,7 +60,7 @@ dotnet publish (Join-Path $srcRoot 'Planet.Launcher') -c Release @publishFlags -
 if ($LASTEXITCODE -ne 0) { throw '启动器发布失败' }
 
 Write-Host "`n[5/5] 发布软件本体 Data\Planet.Main.exe..." -ForegroundColor Yellow
-dotnet publish (Join-Path $srcRoot 'Planet.Main') -c Release @publishFlags -o $dataDirectory | Out-Host
+dotnet publish (Join-Path (Join-Path $srcRoot 'Planet.Main') 'Planet.Main.csproj') -c Release @publishFlags -o $dataDirectory | Out-Host
 if ($LASTEXITCODE -ne 0) { throw '软件本体发布失败' }
 
 # ---------------- 4. 建立 Data 子文件夹 ----------------

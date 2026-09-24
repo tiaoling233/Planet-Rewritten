@@ -18,6 +18,9 @@ public partial class FunctionView : UserControl
     /// <summary>已实现功能的卡片标题（摩斯密码编解码）。</summary>
     private const string MorseCodeTitle = "摩斯密码编解码";
 
+    /// <summary>已实现功能的卡片标题（计算器）。</summary>
+    private const string CalculatorTitle = "计算器";
+
     public FunctionView()
     {
         InitializeComponent();
@@ -61,6 +64,12 @@ public partial class FunctionView : UserControl
         if (card.Title == MorseCodeTitle)
         {
             OpenChildWindow(new MorseCodeWindow());
+            return;
+        }
+
+        if (card.Title == CalculatorTitle)
+        {
+            OpenChildWindow(new CalculatorWindow());
             return;
         }
 
