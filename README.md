@@ -30,7 +30,7 @@
 
 本仓库根目录为 `src/`，其与工作区的关系如下：
 
-```
+```dir
 D:\AAAPlanet-Rewritten\
 ├── ref\                 # 原始 VBS 代码与 todo.md（只读存档，不入库）
 ├── src\                 # 全部源代码（Git 仓库根目录）
@@ -51,7 +51,7 @@ D:\AAAPlanet-Rewritten\
 
 ### 便携版目录（app\Planet）
 
-```
+```dir
 Planet\                  # 便携版根目录：仅两个顶层条目
 ├── Planet.exe           # 启动器（校验目录、拉起软件本体）
 └── Data\                # 全部数据存放在此，移动/备份只需带走该文件夹
@@ -102,4 +102,3 @@ dotnet build Planet.sln -c Release
 
 - 原始 VBS 版开发者：**乱码vvv**（感谢原作者的创意）
 - 重写版开发者：tiaoling233
- 
