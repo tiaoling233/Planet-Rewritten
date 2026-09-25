@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Planet.Main"
+        xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
         mc:Ignorable="d"
         Title="Planet"
         Icon="Assets/planet.ico"
@@ -12,11 +13,21 @@
         MinHeight="480"
         MinWidth="720"
         WindowStyle="None"
-        AllowsTransparency="True"
-        ResizeMode="CanResize"
+        AllowsTransparency="False"
+        ResizeMode="NoResize"
         Background="Transparent"
         WindowStartupLocation="CenterScreen"
         PreviewKeyDown="OnWindowPreviewKeyDown">
+
+        <WindowChrome.WindowChrome>
+            <shell:WindowChrome CaptionHeight="0"
+                                 ResizeBorderThickness="0"
+                                 GlassFrameThickness="0"
+                                 CornerRadius="0"
+                                 UseAeroCaptionButtons="False" />
+        </WindowChrome.WindowChrome>
+
+
 
     <Window.Resources>
         <!-- 窗口内部固定前景资源；背景与强调色统一由 App 级主题资源提供。 -->
@@ -154,11 +165,27 @@
         </Viewbox>
     </Window.Resources>
 
-    <Grid>
+    <!-- 九宫格根布局：中心区域承载应用内容，四周仅保留缩放命中区。 -->
+    <Grid Background="Transparent">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="5" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="5" />
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200" />
+            <ColumnDefinition Width="5" />
             <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="5" />
         </Grid.ColumnDefinitions>
+
+        <!-- 内容跨越九宫格全部区域并铺满窗口；边缘 Thumb 以更高 ZIndex 仅覆盖命中区。 -->
+        <Grid Grid.RowSpan="3"
+              Grid.ColumnSpan="3"
+              Panel.ZIndex="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
 
         <!-- ============ 左侧标签栏（固定 200px） ============ -->
         <Grid Grid.Column="0"
@@ -298,51 +325,71 @@
         </Grid>
 
         <!-- 背景暗化遮罩：弹窗弹出时覆盖全部内容（Panel.ZIndex 确保在最顶层） -->
-        <Border x:Name="DimOverlay"
-                Grid.ColumnSpan="2"
-                Background="#80000000"
-                Visibility="Collapsed"
-                Panel.ZIndex="999" />
-
-        <!-- 无边框窗口缩放手柄：透明 Thumb，仅负责接收拖拽。 -->
-        <Grid Grid.ColumnSpan="2"
-              Panel.ZIndex="998"
-              IsHitTestVisible="True">
-            <!-- 四条边 -->
-            <Thumb Grid.Row="0" Grid.Column="0" Tag="Top"
-                   Height="5" HorizontalAlignment="Stretch" VerticalAlignment="Top"
-                   Cursor="SizeNS" DragDelta="OnResizeThumbDragDelta"
-                   Background="Transparent" />
-            <Thumb Grid.Row="0" Grid.Column="0" Tag="Bottom"
-                   Height="5" HorizontalAlignment="Stretch" VerticalAlignment="Bottom"
-                   Cursor="SizeNS" DragDelta="OnResizeThumbDragDelta"
-                   Background="Transparent" />
-            <Thumb Grid.Row="0" Grid.Column="0" Tag="Left"
-                   Width="5" HorizontalAlignment="Left" VerticalAlignment="Stretch"
-                   Cursor="SizeWE" DragDelta="OnResizeThumbDragDelta"
-                   Background="Transparent" />
-            <Thumb Grid.Row="0" Grid.Column="0" Tag="Right"
-                   Width="5" HorizontalAlignment="Right" VerticalAlignment="Stretch"
-                   Cursor="SizeWE" DragDelta="OnResizeThumbDragDelta"
-                   Background="Transparent" />
-
-            <!-- 四角：放在四边手柄上层，优先接收角落拖拽。 -->
-            <Thumb Grid.Row="0" Grid.Column="0" Tag="TopLeft"
-                   Width="12" Height="12" HorizontalAlignment="Left" VerticalAlignment="Top"
-                   Cursor="SizeNWSE" DragDelta="OnResizeThumbDragDelta"
-                   Background="Transparent" />
-            <Thumb Grid.Row="0" Grid.Column="0" Tag="TopRight"
-                   Width="12" Height="12" HorizontalAlignment="Right" VerticalAlignment="Top"
-                   Cursor="SizeNESW" DragDelta="OnResizeThumbDragDelta"
-                   Background="Transparent" />
-            <Thumb Grid.Row="0" Grid.Column="0" Tag="BottomLeft"
-                   Width="12" Height="12" HorizontalAlignment="Left" VerticalAlignment="Bottom"
-                   Cursor="SizeNESW" DragDelta="OnResizeThumbDragDelta"
-                   Background="Transparent" />
-            <Thumb Grid.Row="0" Grid.Column="0" Tag="BottomRight"
-                   Width="12" Height="12" HorizontalAlignment="Right" VerticalAlignment="Bottom"
-                   Cursor="SizeNWSE" DragDelta="OnResizeThumbDragDelta"
-                   Background="Transparent" />
+            <Border x:Name="DimOverlay"
+                    Grid.ColumnSpan="2"
+                    Background="#80000000"
+                    Visibility="Collapsed"
+                    Panel.ZIndex="999" />
         </Grid>
+
+        <!-- 缩放手柄：只占九宫格边缘 5px / 四角 12px，不覆盖中心内容区。 -->
+        <Thumb Grid.Row="0" Grid.Column="1"
+               Tag="Top"
+               Background="Transparent"
+               Panel.ZIndex="10"
+               Cursor="SizeNS"
+               DragDelta="OnResizeThumbDragDelta" />
+        <Thumb Grid.Row="2" Grid.Column="1"
+               Tag="Bottom"
+               Background="Transparent"
+               Panel.ZIndex="10"
+               Cursor="SizeNS"
+               DragDelta="OnResizeThumbDragDelta" />
+        <Thumb Grid.Row="1" Grid.Column="0"
+               Tag="Left"
+               Background="Transparent"
+               Panel.ZIndex="10"
+               Cursor="SizeWE"
+               DragDelta="OnResizeThumbDragDelta" />
+        <Thumb Grid.Row="1" Grid.Column="2"
+               Tag="Right"
+               Background="Transparent"
+               Panel.ZIndex="10"
+               Cursor="SizeWE"
+               DragDelta="OnResizeThumbDragDelta" />
+
+        <!-- 四角：12×12 优先命中。 -->
+        <Thumb Grid.Row="0" Grid.Column="0"
+               Tag="TopLeft"
+               Width="12" Height="12"
+               HorizontalAlignment="Left" VerticalAlignment="Top"
+               Background="Transparent"
+               Panel.ZIndex="11"
+               Cursor="SizeNWSE"
+               DragDelta="OnResizeThumbDragDelta" />
+        <Thumb Grid.Row="0" Grid.Column="2"
+               Tag="TopRight"
+               Width="12" Height="12"
+               HorizontalAlignment="Right" VerticalAlignment="Top"
+               Background="Transparent"
+               Panel.ZIndex="11"
+               Cursor="SizeNESW"
+               DragDelta="OnResizeThumbDragDelta" />
+        <Thumb Grid.Row="2" Grid.Column="0"
+               Tag="BottomLeft"
+               Width="12" Height="12"
+               HorizontalAlignment="Left" VerticalAlignment="Bottom"
+               Background="Transparent"
+               Panel.ZIndex="11"
+               Cursor="SizeNESW"
+               DragDelta="OnResizeThumbDragDelta" />
+        <Thumb Grid.Row="2" Grid.Column="2"
+               Tag="BottomRight"
+               Width="12" Height="12"
+               HorizontalAlignment="Right" VerticalAlignment="Bottom"
+               Background="Transparent"
+               Panel.ZIndex="11"
+               Cursor="SizeNWSE"
+               DragDelta="OnResizeThumbDragDelta" />
     </Grid>
 </Window>

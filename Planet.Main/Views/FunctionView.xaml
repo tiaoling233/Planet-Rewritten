@@ -119,9 +119,11 @@
         </ScrollViewer>
 
         <!-- 已实现功能以内联视图显示；外层圆角裁剪避免子页面内容溢出圆角。 -->
-        <Border Background="Transparent"
+        <Border x:Name="FunctionHostClip"
+                Background="Transparent"
                 CornerRadius="12"
-                ClipToBounds="True">
+                ClipToBounds="True"
+                Visibility="Collapsed">
             <ContentControl x:Name="FunctionHost"
                             HorizontalContentAlignment="Stretch"
                             VerticalContentAlignment="Stretch"

@@ -133,6 +133,7 @@ public partial class FunctionView : UserControl
         _isShowingGrid = false;
         FunctionHost.Content = view;
         FunctionHost.Visibility = Visibility.Visible;
+        FunctionHostClip.Visibility = Visibility.Visible;
         GridView.Visibility = Visibility.Collapsed;
 
         if (Window.GetWindow(this) is MainWindow mainWindow)
@@ -152,6 +153,7 @@ public partial class FunctionView : UserControl
         _isShowingGrid = true;
         FunctionHost.Content = null;
         FunctionHost.Visibility = Visibility.Collapsed;
+        FunctionHostClip.Visibility = Visibility.Collapsed;
         GridView.Visibility = Visibility.Visible;
 
         if (Window.GetWindow(this) is MainWindow mainWindow)

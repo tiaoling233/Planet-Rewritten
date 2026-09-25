@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using System.Runtime.InteropServices;
+using System.Windows;
+using System.Windows.Interop;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
@@ -13,6 +15,42 @@ namespace Planet.Main;
 /// </summary>
 public partial class MainWindow : Window
 {
+    private const int SwpNoSize = 0x0001;
+    private const int SwpNoMove = 0x0002;
+    private const int SwpNoZOrder = 0x0004;
+    private const int SwpNoActivate = 0x0010;
+    private const int SwpFrameChanged = 0x0020;
+    private const int GwlStyle = -16;
+    private const int WsCaption = 0x00C00000;
+    private const int WsBorder = 0x00800000;
+    private const int WsDlgFrame = 0x00400000;
+    private const int WsThickFrame = 0x00040000;
+    private const int DwmwaNcRenderingPolicy = 2;
+    private const int DwmncrpDisabled = 1;
+
+    [DllImport("user32.dll", EntryPoint = "GetWindowLongW", SetLastError = true)]
+    private static extern int GetWindowLong(IntPtr hwnd, int index);
+
+    [DllImport("user32.dll", EntryPoint = "SetWindowLongW", SetLastError = true)]
+    private static extern int SetWindowLong(IntPtr hwnd, int index, int newLong);
+
+    [DllImport("user32.dll", SetLastError = true)]
+    private static extern bool SetWindowPos(
+        IntPtr hwnd,
+        IntPtr insertAfter,
+        int x,
+        int y,
+        int width,
+        int height,
+        uint flags);
+
+    [DllImport("dwmapi.dll", PreserveSig = true)]
+    private static extern int DwmSetWindowAttribute(
+        IntPtr hwnd,
+        int attribute,
+        ref int attributeValue,
+        int attributeSize);
+
     private static readonly Brush _pageTextBrush = new SolidColorBrush(Color.FromRgb(0x44, 0x4A, 0x53));
 
     private readonly RadioButton[] _navButtons;
@@ -22,16 +60,90 @@ public partial class MainWindow : Window
         InitializeComponent();
         _navButtons = new[] { BtnHome, BtnFunct, BtnMystery, BtnInfo, BtnSettings };
 
+        SourceInitialized += OnSourceInitialized;
         Loaded += OnLoaded;
         Closed += (_, _) => LogService.Info("主窗口已关闭");
     }
 
     private void OnLoaded(object sender, RoutedEventArgs e)
     {
+        var hwndSource = (System.Windows.Interop.HwndSource)System.Windows.PresentationSource.FromVisual(this);
+        var rootScreenPoint = PointToScreen(new Point(0, 0));
+        LogService.Info(
+            $"边框诊断: Left={Left}, Top={Top}, ActualWidth={ActualWidth}, ActualHeight={ActualHeight}, " +
+            $"RootScreen={rootScreenPoint.X},{rootScreenPoint.Y}, HwndHandle={hwndSource?.Handle}");
+
         LogService.Info("主窗口已加载");
 
         // 默认选中“主页”（索引 0）：设置 IsChecked 会触发 Checked 事件 → SwitchPage(0)，同时完成初始高亮
         _navButtons[0].IsChecked = true;
+    }
+
+    private const int WmNcCalcSize = 0x0083;
+
+    private void OnSourceInitialized(object? sender, EventArgs e)
+    {
+        if (PresentationSource.FromVisual(this) is HwndSource source)
+        {
+            source.AddHook(MainWindowWndProc);
+        }
+
+        DisableDwmNonClientRendering();
+    }
+
+    private IntPtr MainWindowWndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
+    {
+        // 返回 0 让客户区覆盖整个窗口矩形，去掉 Win10 的 DWM resize frame。
+        if (msg == WmNcCalcSize && wParam != IntPtr.Zero)
+        {
+            handled = true;
+            return IntPtr.Zero;
+        }
+
+        return IntPtr.Zero;
+    }
+
+    private void DisableDwmNonClientRendering()
+    {
+        try
+        {
+            IntPtr handle = new System.Windows.Interop.WindowInteropHelper(this).Handle;
+            if (handle == IntPtr.Zero)
+            {
+                return;
+            }
+
+            int policy = DwmncrpDisabled;
+            _ = DwmSetWindowAttribute(
+                handle,
+                DwmwaNcRenderingPolicy,
+                ref policy,
+                Marshal.SizeOf<int>());
+
+            // ResizeMode=CanResize 会创建 WS_THICKFRAME，Windows 10 由此绘制 4px DWM 阴影。
+            // 保留 XAML 的 CanResize 语义，但移除系统 frame；实际缩放由透明 Thumb 完成。
+            int style = GetWindowLong(handle, GwlStyle);
+            SetWindowLong(
+                handle,
+                GwlStyle,
+                style & ~(WsCaption | WsBorder | WsDlgFrame | WsThickFrame));
+            _ = SetWindowPos(
+                handle,
+                IntPtr.Zero,
+                0,
+                0,
+                0,
+                0,
+                SwpNoSize | SwpNoMove | SwpNoZOrder | SwpNoActivate | SwpFrameChanged);
+        }
+        catch (DllNotFoundException)
+        {
+            // 极旧的系统若缺少 dwmapi.dll，保留系统默认绘制。
+        }
+        catch (EntryPointNotFoundException)
+        {
+            // 系统不支持该入口时静默回退。
+        }
     }
 
     private void OnNavButtonChecked(object sender, RoutedEventArgs e)

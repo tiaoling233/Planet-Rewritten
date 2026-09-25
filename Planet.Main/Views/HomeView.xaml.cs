@@ -6,7 +6,7 @@ namespace Planet.Main.Views;
 
 /// <summary>
 /// 主页：动态问候语、用户名、实时日期与时间。
-/// 使用 DispatcherTimer 每秒刷新，避免后台线程直接操作 UI。
+/// DispatcherTimer 仅在页面 Loaded 期间运行，离开主页后自动停止。
 /// </summary>
 public partial class HomeView : UserControl
 {
@@ -18,11 +18,15 @@ public partial class HomeView : UserControl
         InitializeComponent();
 
         _userName = Environment.UserName;
-        _clockTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
+        _clockTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(200) };
         _clockTimer.Tick += (_, _) => RefreshClock();
-        _clockTimer.Start();
 
-        Loaded += (_, _) => RefreshClock();
+        // 仅在主页实际加载时运行；ContentControl 切走会触发 Unloaded 并停止计时器。
+        Loaded += (_, _) =>
+        {
+            RefreshClock();
+            _clockTimer.Start();
+        };
         Unloaded += (_, _) => _clockTimer.Stop();
     }
 
