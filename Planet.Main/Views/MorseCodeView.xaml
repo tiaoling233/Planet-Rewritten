@@ -13,6 +13,7 @@
             BorderBrush="#E3E6EA"
             BorderThickness="1"
             CornerRadius="12"
+            ClipToBounds="True"
             Padding="22,18">
         <Border.Effect>
             <DropShadowEffect BlurRadius="20"

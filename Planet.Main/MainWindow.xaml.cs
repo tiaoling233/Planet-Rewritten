@@ -215,6 +215,44 @@ public partial class MainWindow : Window
         }
     }
 
+    /// <summary>
+    /// 无边框窗口缩放手柄的统一拖拽处理。
+    /// 从左侧/顶部缩放时同步移动 Left/Top，以保持右/下边缘位置不变。
+    /// </summary>
+    private void OnResizeThumbDragDelta(object sender, DragDeltaEventArgs e)
+    {
+        if (WindowState != WindowState.Normal
+            || sender is not Thumb { Tag: string direction })
+        {
+            return;
+        }
+
+        double horizontalDelta = e.HorizontalChange;
+        double verticalDelta = e.VerticalChange;
+        bool resizeLeft = direction is "Left" or "TopLeft" or "BottomLeft";
+        bool resizeRight = direction is "Right" or "TopRight" or "BottomRight";
+        bool resizeTop = direction is "Top" or "TopLeft" or "TopRight";
+        bool resizeBottom = direction is "Bottom" or "BottomLeft" or "BottomRight";
+
+        double newWidth = Width + (resizeLeft ? -horizontalDelta : resizeRight ? horizontalDelta : 0);
+        double newHeight = Height + (resizeTop ? -verticalDelta : resizeBottom ? verticalDelta : 0);
+        newWidth = Math.Max(MinWidth, newWidth);
+        newHeight = Math.Max(MinHeight, newHeight);
+
+        if (resizeLeft)
+        {
+            Left += Width - newWidth;
+        }
+
+        if (resizeTop)
+        {
+            Top += Height - newHeight;
+        }
+
+        Width = newWidth;
+        Height = newHeight;
+    }
+
     private static T? FindAncestor<T>(DependencyObject? current) where T : DependencyObject
     {
         while (current is not null)
