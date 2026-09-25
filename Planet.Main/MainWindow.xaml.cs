@@ -202,7 +202,7 @@ public partial class MainWindow : Window
     }
 
     /// <summary>
-    /// 窗口内标签页切换快捷键：A / ← 上一页，D / → 下一页（0↔4 循环）。
+    /// 窗口内标签页切换快捷键：W / A / ↑ / ← 上一页，S / D / ↓ / → 下一页（0↔4 循环）。
     /// 输入控件聚焦时放行；Win 组合键不参与页面切换。
     /// </summary>
     private void OnWindowPreviewKeyDown(object sender, KeyEventArgs e)
@@ -221,10 +221,10 @@ public partial class MainWindow : Window
         // Win 组合键交给系统处理，不参与页面切换
         if ((modifiers & ModifierKeys.Windows) == ModifierKeys.Windows)
         {
-            if (key is Key.Left or Key.Right or Key.Up)
+            if (key is Key.Left or Key.Right or Key.Up or Key.Down)
             {
-                // Win+←/→/↑：标记已处理，阻止本窗口后续键盘路由将其识别为标签页切换。
-                // 说明：系统级窗口吸附由 shell 处理，需全局键盘钩子才能拦截；本项目按需求不引入全局钩子。
+                // Win+←/→/↑/↓：标记已处理，阻止本窗口后续键盘路由将其识别为标签页切换。
+                // 说明：系统级窗口吸附/最小化由 shell 处理，需全局键盘钩子才能拦截；本项目按需求不引入全局钩子。
                 e.Handled = true;
             }
 
@@ -240,8 +240,8 @@ public partial class MainWindow : Window
         int current = GetCurrentPageIndex();
         int? target = key switch
         {
-            Key.A or Key.Left => current - 1,
-            Key.D or Key.Right => current + 1,
+            Key.W or Key.Up or Key.A or Key.Left => current - 1,
+            Key.S or Key.Down or Key.D or Key.Right => current + 1,
             _ => null,
         };
 
