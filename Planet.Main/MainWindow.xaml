@@ -163,6 +163,16 @@
             <Path Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
                   Data="M1022.583467 127.803733 894.779733 0 511.291733 383.4624 127.8464 0 0 127.803733 383.496533 511.274667 0 894.737067 127.8464 1022.5408 511.291733 639.0784 894.779733 1022.5408 1022.583467 894.737067 639.138133 511.274667Z" />
         </Viewbox>
+        <!-- 隐形缩放 Thumb 模板：完全透明，不产生任何系统边框与阴影伪影 -->
+        <Style x:Key="InvisibleResizeThumbStyle" TargetType="Thumb">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Thumb">
+                        <Rectangle Fill="Transparent" />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Window.Resources>
 
     <!-- 九宫格根布局：中心区域承载应用内容，四周仅保留缩放命中区。 -->
@@ -332,28 +342,28 @@
                     Panel.ZIndex="999" />
         </Grid>
 
-        <!-- 缩放手柄：只占九宫格边缘 5px / 四角 12px，不覆盖中心内容区。 -->
+        <!-- 缩放手柄：只占九宫格边缘 5px / 四角 12px，不覆盖中心内容区。使用定制透明模板，杜绝默认边框。 -->
         <Thumb Grid.Row="0" Grid.Column="1"
                Tag="Top"
-               Background="Transparent"
+               Style="{StaticResource InvisibleResizeThumbStyle}"
                Panel.ZIndex="10"
                Cursor="SizeNS"
                DragDelta="OnResizeThumbDragDelta" />
         <Thumb Grid.Row="2" Grid.Column="1"
                Tag="Bottom"
-               Background="Transparent"
+               Style="{StaticResource InvisibleResizeThumbStyle}"
                Panel.ZIndex="10"
                Cursor="SizeNS"
                DragDelta="OnResizeThumbDragDelta" />
         <Thumb Grid.Row="1" Grid.Column="0"
                Tag="Left"
-               Background="Transparent"
+               Style="{StaticResource InvisibleResizeThumbStyle}"
                Panel.ZIndex="10"
                Cursor="SizeWE"
                DragDelta="OnResizeThumbDragDelta" />
         <Thumb Grid.Row="1" Grid.Column="2"
                Tag="Right"
-               Background="Transparent"
+               Style="{StaticResource InvisibleResizeThumbStyle}"
                Panel.ZIndex="10"
                Cursor="SizeWE"
                DragDelta="OnResizeThumbDragDelta" />
@@ -363,7 +373,7 @@
                Tag="TopLeft"
                Width="12" Height="12"
                HorizontalAlignment="Left" VerticalAlignment="Top"
-               Background="Transparent"
+               Style="{StaticResource InvisibleResizeThumbStyle}"
                Panel.ZIndex="11"
                Cursor="SizeNWSE"
                DragDelta="OnResizeThumbDragDelta" />
@@ -371,7 +381,7 @@
                Tag="TopRight"
                Width="12" Height="12"
                HorizontalAlignment="Right" VerticalAlignment="Top"
-               Background="Transparent"
+               Style="{StaticResource InvisibleResizeThumbStyle}"
                Panel.ZIndex="11"
                Cursor="SizeNESW"
                DragDelta="OnResizeThumbDragDelta" />
@@ -379,7 +389,7 @@
                Tag="BottomLeft"
                Width="12" Height="12"
                HorizontalAlignment="Left" VerticalAlignment="Bottom"
-               Background="Transparent"
+               Style="{StaticResource InvisibleResizeThumbStyle}"
                Panel.ZIndex="11"
                Cursor="SizeNESW"
                DragDelta="OnResizeThumbDragDelta" />
@@ -387,7 +397,7 @@
                Tag="BottomRight"
                Width="12" Height="12"
                HorizontalAlignment="Right" VerticalAlignment="Bottom"
-               Background="Transparent"
+               Style="{StaticResource InvisibleResizeThumbStyle}"
                Panel.ZIndex="11"
                Cursor="SizeNWSE"
                DragDelta="OnResizeThumbDragDelta" />
